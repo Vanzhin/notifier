@@ -1,0 +1,80 @@
+doctrine:
+    dbal:
+        connections:
+            default:
+                driver: pdo_pgsql
+                dbname: '%env(DB_NAME)%'
+                host: '%env(DB_HOST)%'
+                port: '%env(DB_PORT)%'
+                user: '%env(DB_USER)%'
+                password: '%env(DB_PASSWORD)%'
+                server_version: 17.5.0
+                use_savepoints: true
+                profiling_collect_backtrace: '%kernel.debug%'
+        default_connection: default
+        #    profiling_collect_backtrace: '%kernel.debug%'
+        #    use_savepoints: true
+
+        #        url: '%env(resolve:DATABASE_URL)%'
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '16'
+    orm:
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        default_entity_manager: default
+        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+        proxy_namespace: Proxies
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                connection: default
+#                mappings:
+#                    Users:
+#                        type: xml
+#                        is_bundle: false
+#                        dir: '%kernel.project_dir%/src/Users/Infrastructure/Database/ORM'
+#                        prefix: 'App\Users\Domain\Aggregate'
+#                        alias: Users
+#                dql:
+#                    string_functions:
+#                        JSON_GET_TEXT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGetText
+#                        JSONB_EXISTS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbExists
+#                        JSONB_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbContains
+#                        JSONB_EXISTS_ANY: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbExistsAny
+
+#            App:
+#                is_bundle: false
+#                dir: '%kernel.project_dir%/src/Shared/Domain/Entity'
+#                prefix: 'App\Shared\Domain\Entity'
+#                alias: App
+#        controller_resolver:
+#            auto_mapping: true
+
+#when@test:
+#    doctrine:
+#        dbal:
+#            # "TEST_TOKEN" is typically set by ParaTest
+#            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+#when@prod:
+#  doctrine:
+#    orm:
+#      auto_generate_proxy_classes: false
+#      proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+#      query_cache_driver:
+#        type: pool
+#        pool: doctrine.system_cache_pool
+#      result_cache_driver:
+#        type: pool
+#        pool: doctrine.result_cache_pool
+#
+#  framework:
+#    cache:
+#      pools:
+#        doctrine.result_cache_pool:
+#          adapter: cache.app
+#        doctrine.system_cache_pool:
+#          adapter: cache.system
