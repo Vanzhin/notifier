@@ -21,4 +21,15 @@ final class SubscriptionRepository extends ServiceEntityRepository implements Su
         $this->getEntityManager()->persist($subscription);
         $this->getEntityManager()->flush();
     }
+
+    public function findById(string $id): ?Subscription
+    {
+        return $this->find($id);
+    }
+
+    public function remove(Subscription $subscription): void
+    {
+        $this->getEntityManager()->remove($subscription);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -40,7 +40,7 @@ final  class Subscription extends Aggregate
         return $this->id;
     }
 
-    public function getSubscriptionEvents(): ArrayCollection
+    public function getSubscriptionEvents(): Collection
     {
         return $this->subscriptionEvents;
     }
@@ -104,7 +104,7 @@ final  class Subscription extends Aggregate
         });
     }
 
-    public function getChannels(): ArrayCollection
+    public function getChannels(): Collection
     {
         return $this->channels;
     }
