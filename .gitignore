@@ -54,3 +54,4 @@
 .env
 /app/.editorconfig
 /.idea/*
+/app/tests/test-results

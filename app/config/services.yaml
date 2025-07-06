@@ -42,6 +42,8 @@ services:
             - '%env(LOG_TELEGRAM_TOKEN)%'
             - '%env(LOG_TELEGRAM_CHANNEL)%'
     # Telegram
-
+    App\Shared\Infrastructure\Validation\Validator:
+        arguments:
+            $validatorBuilder: '@validator.builder'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Domain\Aggregate;
 
 use App\Shared\Domain\Event\EventInterface;
+use Symfony\Component\Uid\Uuid;
 
 abstract class Aggregate
 {
@@ -13,7 +14,7 @@ abstract class Aggregate
      */
     private array $events = [];
 
-    abstract public function getId(): string;
+    abstract public function getId(): Uuid;
 
     /**
      * @return EventInterface[]

@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Notification\Domain\Aggregate\Channel" table="notification_channel">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="data" type="json">
+            <options>
+                <option name="default">[]</option>
+            </options>
+        </field>
+        <field name="type" column="type" type="string"
+               enum-type="App\Notification\Domain\Aggregate\ValueObject\ChannelType" length="50"/>
+        <many-to-one field="subscription" target-entity="App\Notification\Domain\Aggregate\Subscription">
+            <join-column name="subscription_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+        <field name="isVerified" type="boolean" column="is_verified"/>
+    </entity>
+</doctrine-mapping>

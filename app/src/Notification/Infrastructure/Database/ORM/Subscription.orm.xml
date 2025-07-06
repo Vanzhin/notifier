@@ -1,0 +1,29 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Notification\Domain\Aggregate\Subscription" table="notification_subscription">
+        <id name="id" type="uuid">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="subscriberId" length="36"/>
+        <embedded name="phoneNumber" class="App\Notification\Domain\Aggregate\ValueObject\PhoneNumber"
+                  use-column-prefix="false"/>
+        <one-to-many field="channels" target-entity="App\Notification\Domain\Aggregate\Channel"
+                     mapped-by="subscription">
+            <order-by>
+                <order-by-field name="type" direction="DESC"/>
+            </order-by>
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+        <field name="subscriptionEvents" column="events" type="event_type_collection">
+            <options>
+                <option name="default">[]</option>
+            </options>
+        </field>
+        <field name="createdAt" type="datetimetz_immutable"/>
+    </entity>
+</doctrine-mapping>
