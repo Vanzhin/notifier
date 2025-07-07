@@ -29,7 +29,7 @@ class SubscriptionMapper
             ]),
             'channels' => new Assert\Collection([
                 'telegram' => new Assert\Collection([
-                    'bot_id' => [
+                    'channel_id' => [
                         new Assert\NotBlank(allowNull: true),
                         new Assert\Type('string'),
                     ]

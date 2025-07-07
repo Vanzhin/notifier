@@ -23,6 +23,6 @@ class GetSubscriptionAction extends AbstractController
         $query = new FindSubscriptionQuery($id);
         $result = $this->queryBus->execute($query);
 
-        return new JsonResponse($result);
+        return new JsonResponse($result->subscription);
     }
 }
