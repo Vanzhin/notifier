@@ -6,10 +6,16 @@ controllers:
 
 
 api_v1_subscription:
-    resource: ../src/Notification/Infrastructure/Controller/v1/
+    resource: ../src/Notification/Infrastructure/Controller/v1/Subscription
     type: attribute
     prefix: /api/v1
     name_prefix: api_v1_
+
+webhooks:
+    resource:
+        path: ../src/Notification/Infrastructure/Webhook/Telegram
+        namespace: App\Notification\Infrastructure\Webhook\Telegram
+    type: attribute
 
 kernel:
     resource: ../src/Shared/Infrastructure/Kernel.php

@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.15",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.5",
+        "longman/telegram-bot": "^0.83.1",
         "symfony/amqp-messenger": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",

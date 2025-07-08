@@ -32,7 +32,7 @@ services:
             tags:
                 - { name: messenger.message_handler,  bus: message.bus }
 
-    # Telegram
+    # Telegram logger
     App\Shared\Infrastructure\EventListener\Request\SessionRequestProcessor:
         tags:
             - { name: monolog.processor, channel: 'notifier' }
@@ -41,7 +41,27 @@ services:
         arguments:
             - '%env(LOG_TELEGRAM_TOKEN)%'
             - '%env(LOG_TELEGRAM_CHANNEL)%'
-    # Telegram
+    # Telegram logger
+
+    # Telegram Notification
+    App\Notification\Application\Channel\Telegram\Service\TelegramBotService:
+        arguments:
+            $webhookUrl: '%env(TELEGRAM_NOTIFICATION_BOT_WEBHOOK)%'
+            $commandPath:  /app/src/Notification/Application/Channel/Telegram/Command
+            $commandClasses:
+                - App\Notification\Application\Channel\Telegram\Command\StartCommand
+                - App\Notification\Application\Channel\Telegram\Command\HelloCommand
+
+
+
+    Longman\TelegramBot\Telegram:
+        arguments:
+            - '%env(TELEGRAM_NOTIFICATION_BOT_TOKEN)%'  # API ключ
+            - '%env(TELEGRAM_NOTIFICATION_BOT_USERNAME)%'  # Имя бота
+    # Telegram Notification
+
+
+
     App\Shared\Infrastructure\Validation\Validator:
         arguments:
             $validatorBuilder: '@validator.builder'

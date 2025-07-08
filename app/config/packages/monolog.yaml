@@ -25,7 +25,7 @@ monolog:
         telegram: # Важна только эта часть
             type: service
             id: telegram_handler
-            channels: [ 'partner' ]
+            channels: [ 'notifier' ]
             level: debug
         console:
             type: console

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Infrastructure\Controller\v1;
+namespace App\Notification\Infrastructure\Controller\v1\Subscription;
 
 use App\Notification\Application\UseCase\Query\FindSubscription\FindSubscriptionQuery;
 use App\Shared\Application\Query\QueryBusInterface;

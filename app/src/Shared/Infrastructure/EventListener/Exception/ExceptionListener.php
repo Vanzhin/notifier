@@ -17,9 +17,9 @@ use Webmozart\Assert\InvalidArgumentException;
 class ExceptionListener
 {
     public const string MIME_JSON = 'application/json';
-    private const string GENERAL_EXCEPTION = 'Partner cabinet general.';
+    private const string GENERAL_EXCEPTION = 'Notifier general.';
 
-    public function __construct(private ContainerBagInterface $containerBag, private LoggerInterface $partnerLogger)
+    public function __construct(private ContainerBagInterface $containerBag, private LoggerInterface $notifierLogger)
     {
     }
 
@@ -50,7 +50,7 @@ class ExceptionListener
             $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $this->partnerLogger->error(self::GENERAL_EXCEPTION, json_decode($response->getContent(), true));
+        $this->notifierLogger->error(self::GENERAL_EXCEPTION, json_decode($response->getContent(), true));
 
         $event->setResponse($response);
         //        }

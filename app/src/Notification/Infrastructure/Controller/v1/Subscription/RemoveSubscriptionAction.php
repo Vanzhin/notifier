@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Infrastructure\Controller\v1;
+namespace App\Notification\Infrastructure\Controller\v1\Subscription;
 
 use App\Notification\Application\UseCase\Command\RemoveSubscription\RemoveSubscriptionCommand;
 use App\Shared\Application\Command\CommandBusInterface;
