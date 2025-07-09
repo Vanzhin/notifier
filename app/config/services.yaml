@@ -48,11 +48,6 @@ services:
         arguments:
             $webhookUrl: '%env(TELEGRAM_NOTIFICATION_BOT_WEBHOOK)%'
             $commandPath:  /app/src/Notification/Application/Channel/Telegram/Command
-            $commandClasses:
-                - App\Notification\Application\Channel\Telegram\Command\StartCommand
-                - App\Notification\Application\Channel\Telegram\Command\HelloCommand
-
-
 
     Longman\TelegramBot\Telegram:
         arguments:

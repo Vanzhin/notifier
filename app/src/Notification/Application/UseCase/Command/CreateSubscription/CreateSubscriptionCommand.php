@@ -10,7 +10,7 @@ final readonly class CreateSubscriptionCommand implements CommandInterface
 {
     public function __construct(
         public string $subscriberId,
-        public string $phoneNumber,
+        public array $phoneNumbers,
         public array $events,
         public array $channels
     ) {

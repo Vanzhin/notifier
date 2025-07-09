@@ -8,10 +8,6 @@ use App\Notification\Domain\Aggregate\Subscription;
 
 interface SubscriptionFactoryInterface
 {
-    public function create(
-        string $subscriberId,
-        string $phoneNumber,
-        string ...$events
-    ): Subscription;
+    public function create(string $subscriberId): Subscription;
 
 }

@@ -17,5 +17,8 @@
             <join-column name="subscription_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
         <field name="isVerified" type="boolean" column="is_verified"/>
+        <indexes>
+            <index name="channel_data_idx" columns="data"/>
+        </indexes>
     </entity>
 </doctrine-mapping>

@@ -6,7 +6,7 @@ namespace App\Notification\Domain\Aggregate;
 
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
-use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber;
+use App\Notification\Domain\Event\SubscriptionCreatedEvent;
 use App\Shared\Domain\Aggregate\Aggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,16 +23,22 @@ final  class Subscription extends Aggregate
      */
     private Collection $channels;
 
+    /**
+     * @var Collection<PhoneNumber>
+     */
+    private Collection $phoneNumbers;
+
     private \DateTimeImmutable $createdAt;
 
     public function __construct(
         private readonly Uuid $id,
         private readonly string $subscriberId,
-        private readonly PhoneNumber $phoneNumber,
     ) {
         $this->subscriptionEvents = new ArrayCollection();
         $this->channels = new ArrayCollection();
+        $this->phoneNumbers = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->raise(new SubscriptionCreatedEvent($this->getId()->toString()));
     }
 
     public function getId(): Uuid
@@ -50,11 +56,6 @@ final  class Subscription extends Aggregate
         return $this->subscriberId;
     }
 
-    public function getPhoneNumber(): PhoneNumber
-    {
-        return $this->phoneNumber;
-    }
-
     public function addEvent(EventType $eventType): void
     {
         if (!$this->subscriptionEvents->contains($eventType)) {
@@ -64,9 +65,7 @@ final  class Subscription extends Aggregate
 
     public function removeEvent(EventType $eventType): void
     {
-        if ($this->subscriptionEvents->contains($eventType)) {
-            $this->subscriptionEvents->removeElement($eventType);
-        }
+        $this->subscriptionEvents->removeElement($eventType);
     }
 
     public function addChannel(Channel $channel): void
@@ -78,9 +77,19 @@ final  class Subscription extends Aggregate
 
     public function removeChannel(Channel $channel): void
     {
-        if ($this->channels->contains($channel)) {
-            $this->channels->removeElement($channel);
+        $this->channels->removeElement($channel);
+    }
+
+    public function addPhoneNumber(PhoneNumber $phoneNumber): void
+    {
+        if (!$this->phoneNumbers->contains($phoneNumber)) {
+            $this->phoneNumbers->add($phoneNumber);
         }
+    }
+
+    public function removePhoneNumber(PhoneNumber $phoneNumber): void
+    {
+        $this->channels->removeElement($phoneNumber);
     }
 
     public function isActive(): bool
@@ -112,5 +121,10 @@ final  class Subscription extends Aggregate
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getPhoneNumbers(): Collection
+    {
+        return $this->phoneNumbers;
     }
 }

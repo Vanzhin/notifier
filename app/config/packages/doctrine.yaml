@@ -46,12 +46,6 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Notification/Infrastructure/Database/ORM'
                         prefix: 'App\Notification\Domain\Aggregate'
                         alias: Channel
-                    ValueObject:
-                        is_bundle: false
-                        type: xml
-                        dir: '%kernel.project_dir%/src/Notification/Infrastructure/Database/ORM/ValueObject'
-                        prefix: 'App\Notification\Domain\Aggregate\ValueObject'
-                        alias: ValueObject
 #                dql:
 #                    string_functions:
 #                        JSON_GET_TEXT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGetText

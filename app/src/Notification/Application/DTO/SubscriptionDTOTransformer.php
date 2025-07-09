@@ -18,11 +18,15 @@ readonly class SubscriptionDTOTransformer
         foreach ($entity->getSubscriptionEvents() as $event) {
             $events[] = $event->value;
         }
+        $phoneNumbers = [];
+        foreach ($entity->getPhoneNumbers() as $phone) {
+            $phoneNumbers[] = $phone->getPhone();
+        }
 
         return new SubscriptionDTO(
             $entity->getId()->toString(),
             $entity->getSubscriberId(),
-            $entity->getPhoneNumber()->getValue(),
+            $phoneNumbers,
             $events,
             $this->channelDTOTransformer->fromEntityList($entity->getChannels()->toArray()),
             $entity->isActive(),

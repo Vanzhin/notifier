@@ -7,8 +7,6 @@
             <generator strategy="NONE"/>
         </id>
         <field name="subscriberId" length="36"/>
-        <embedded name="phoneNumber" class="App\Notification\Domain\Aggregate\ValueObject\PhoneNumber"
-                  use-column-prefix="false"/>
         <one-to-many field="channels" target-entity="App\Notification\Domain\Aggregate\Channel"
                      mapped-by="subscription">
             <order-by>
@@ -19,11 +17,28 @@
                 <cascade-remove/>
             </cascade>
         </one-to-many>
+        <many-to-many field="phoneNumbers" target-entity="App\Notification\Domain\Aggregate\PhoneNumber">
+            <join-table name="notification_subscription_phone_number">
+                <join-columns>
+                    <join-column name="subscription_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="phone_number_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-many>
         <field name="subscriptionEvents" column="events" type="event_type_collection">
             <options>
                 <option name="default">[]</option>
             </options>
         </field>
         <field name="createdAt" type="datetimetz_immutable"/>
+        <indexes>
+            <index name="subscription_subscriber_idx" columns="subscriber_id"/>
+            <index name="subscription_events_idx" columns="events"/>
+        </indexes>
     </entity>
 </doctrine-mapping>

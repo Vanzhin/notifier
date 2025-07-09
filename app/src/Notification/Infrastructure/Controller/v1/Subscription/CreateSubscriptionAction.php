@@ -35,7 +35,7 @@ class CreateSubscriptionAction extends AbstractController
 
         $command = new CreateSubscriptionCommand(
             $subscriber_id,
-            $phone_number,
+            $phone_numbers,
             $events,
             $channels
         );

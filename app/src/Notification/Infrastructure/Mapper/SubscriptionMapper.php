@@ -17,11 +17,11 @@ class SubscriptionMapper
                 new Assert\Type('string'),
                 new Assert\Length(max: 36),
             ],
-            'phone_number' => [
+            'phone_numbers' => new Assert\All([
                 new Assert\NotBlank(),
                 new Assert\Type('numeric'),
                 new Assert\Length(min: 11, max: 17),
-            ],
+            ]),
             'events' => new Assert\All([
                 new Assert\Choice(EventType::values(),
                     message: sprintf('Invalid event type. Allowed: %s.',
