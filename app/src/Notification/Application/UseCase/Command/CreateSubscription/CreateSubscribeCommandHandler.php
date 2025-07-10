@@ -55,13 +55,16 @@ readonly class CreateSubscribeCommandHandler implements CommandHandlerInterface
 
     private function createPhoneIfNotExists(string $phone): PhoneNumber
     {
-        $phoneNumber = $this->phoneRepository->findByPhone($phone);
-        if (null === $phoneNumber) {
-            return new PhoneNumber(
-                Uuid::v4(),
-                $phone,
-            );
+        $phone = new PhoneNumber(
+            Uuid::v4(),
+            $phone);
+
+        $exist = $this->phoneRepository->findByPhone($phone->getPhone());
+
+        if ($exist) {
+            $phone = $exist;
         }
-        return $phoneNumber;
+
+        return $phone;
     }
 }

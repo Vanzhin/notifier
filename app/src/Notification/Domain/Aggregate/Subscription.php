@@ -82,7 +82,12 @@ final  class Subscription extends Aggregate
 
     public function addPhoneNumber(PhoneNumber $phoneNumber): void
     {
-        if (!$this->phoneNumbers->contains($phoneNumber)) {
+        $alreadyHasNumber = $this->phoneNumbers
+            ->findFirst(function ($key, PhoneNumber $phone) use ($phoneNumber) {
+                return $phone->getPhone() === $phoneNumber->getPhone();
+            });
+
+        if (!$alreadyHasNumber) {
             $this->phoneNumbers->add($phoneNumber);
         }
     }
