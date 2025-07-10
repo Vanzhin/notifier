@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
 
-final  class Subscription extends Aggregate
+class Subscription extends Aggregate
 {
     /**
      * @var Collection<EventType>
@@ -99,10 +99,8 @@ final  class Subscription extends Aggregate
 
     public function isActive(): bool
     {
-        foreach ($this->channels as $channel) {
-            if (!$channel->isVerified()) {
-                return false;
-            }
+        if (array_any($this->channels->toArray(), fn($channel) => !$channel->isVerified)) {
+            return false;
         }
 
         return !empty($this->channels);

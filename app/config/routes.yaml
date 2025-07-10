@@ -5,8 +5,8 @@ controllers:
     type: attribute
 
 
-api_v1_subscription:
-    resource: ../src/Notification/Infrastructure/Controller/v1/Subscription
+api_v1:
+    resource: ../src/Notification/Infrastructure/Controller/v1
     type: attribute
     prefix: /api/v1
     name_prefix: api_v1_

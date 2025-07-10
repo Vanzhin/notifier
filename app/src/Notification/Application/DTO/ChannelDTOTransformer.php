@@ -14,7 +14,7 @@ class ChannelDTOTransformer
             $entity->getId()->toString(),
             $entity->getData(),
             $entity->getType()->value,
-            $entity->isVerified(),
+            $entity->isVerified,
         );
     }
 

@@ -12,31 +12,15 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Psr\Log\LoggerInterface;
 
-class TelegramBotService
+final readonly class TelegramBotService
 {
     public function __construct(
-        private readonly string $webhookUrl,
-        private readonly string $commandPath,
-        private readonly Telegram $telegram,
-        private readonly LoggerInterface $logger,
+        private string $webhookUrl,
+        private string $commandPath,
+        private Telegram $telegram,
+        private LoggerInterface $logger,
     ) {
         $this->addCommandsPath();
-    }
-
-    /**
-     * Настройка путей для команд и обработчиков
-     */
-    private function configurePaths(): void
-    {
-        // Путь к командам бота
-        $this->telegram->addCommandsPaths([
-            __DIR__ . '/../../../../Application/Channel/Telegram/Command',
-        ]);
-
-        // Путь к обработчикам callback запросов
-        $this->telegram->addCallbackQueryHandlersPaths([
-            __DIR__ . '/../../../../Application/Channel/Telegram/CallbackQuery',
-        ]);
     }
 
     /**

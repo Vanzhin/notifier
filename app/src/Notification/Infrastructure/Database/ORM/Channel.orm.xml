@@ -1,6 +1,6 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="App\Notification\Domain\Aggregate\Channel" table="notification_channel">
         <id name="id" type="uuid">
@@ -17,6 +17,7 @@
             <join-column name="subscription_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
         <field name="isVerified" type="boolean" column="is_verified"/>
+        <field name="secret" length="100" nullable="true"/>
         <indexes>
             <index name="channel_data_idx" columns="data"/>
         </indexes>

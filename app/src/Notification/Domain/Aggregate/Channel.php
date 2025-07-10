@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace App\Notification\Domain\Aggregate;
 
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
+use App\Notification\Domain\Event\ChannelVerifiedEvent;
 use App\Shared\Domain\Aggregate\Aggregate;
 use Symfony\Component\Uid\Uuid;
 
-final class Channel extends Aggregate implements ChannelInterface
+class Channel extends Aggregate implements ChannelInterface
 {
-    private bool $isVerified;
+    private ?string $secret = null;
+
+    public bool $isVerified {
+        get {
+            return $this->isVerified;
+        }
+    }
 
     public function __construct(
         private Uuid $id,
-        private Subscription $subscription,
+        private readonly Subscription $subscription,
         private array $data,
         private ChannelType $type,
     ) {
@@ -23,12 +30,13 @@ final class Channel extends Aggregate implements ChannelInterface
 
     public function verify(string $verificationValue): bool
     {
-        // TODO: Implement verify() method.
-    }
+        if ($this->secret !== $verificationValue) {
+            return false;
+        }
+        $this->isVerified = true;
+        $this->raise(new ChannelVerifiedEvent($this->getId()->toString()));
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
+        return true;
     }
 
     public function getType(): ChannelType
@@ -54,6 +62,11 @@ final class Channel extends Aggregate implements ChannelInterface
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function setSecret(string $secret): void
+    {
+        $this->secret = $secret;
     }
 
 }

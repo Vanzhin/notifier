@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
 
-final class PhoneNumber extends Aggregate implements \Stringable
+class PhoneNumber extends Aggregate implements \Stringable
 {
     private const string MN_PREFIX = '810';
 

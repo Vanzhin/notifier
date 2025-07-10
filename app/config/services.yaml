@@ -47,13 +47,28 @@ services:
     App\Notification\Application\Channel\Telegram\Service\TelegramBotService:
         arguments:
             $webhookUrl: '%env(TELEGRAM_NOTIFICATION_BOT_WEBHOOK)%'
-            $commandPath:  /app/src/Notification/Application/Channel/Telegram/Command
+            $commandPath: /app/src/Notification/Application/Channel/Telegram/Command
+
+    App\Notification\Domain\Service\TelegramChannelVerifier:
+        arguments:
+            $botName: '%env(TELEGRAM_NOTIFICATION_BOT_USERNAME)%'
+        tags: [ 'channel.verification.strategy' ]
+
+    App\Notification\Application\UseCase\Command\InitiateChannelVerification\InitiateChannelVerificationCommandHandler:
+        arguments:
+            $strategies: !tagged_iterator channel.verification.strategy
 
     Longman\TelegramBot\Telegram:
         arguments:
             - '%env(TELEGRAM_NOTIFICATION_BOT_TOKEN)%'  # API ключ
             - '%env(TELEGRAM_NOTIFICATION_BOT_USERNAME)%'  # Имя бота
     # Telegram Notification
+
+    Random\Randomizer: ~
+
+    App\Shared\Domain\Service\TokenService:
+        arguments:
+            $randomizer: '@Random\Randomizer'
 
 
 
