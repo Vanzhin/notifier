@@ -7,9 +7,11 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-redis": "*",
         "doctrine/doctrine-bundle": "^2.15",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.5",
+        "firebase/php-jwt": "^6.11",
         "longman/telegram-bot": "^0.83.1",
         "symfony/amqp-messenger": "7.3.*",
         "symfony/console": "7.3.*",
@@ -23,8 +25,7 @@
         "symfony/uid": "7.3.*",
         "symfony/validator": "7.3.*",
         "symfony/yaml": "7.3.*",
-        "webmozart/assert": "^1.11",
-        "ext-redis": "*"
+        "webmozart/assert": "^1.11"
     },
     "config": {
         "allow-plugins": {

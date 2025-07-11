@@ -7,6 +7,9 @@ namespace App\Notification\Domain\Aggregate;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Event\ChannelVerifiedEvent;
 use App\Shared\Domain\Aggregate\Aggregate;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 class Channel extends Aggregate implements ChannelInterface
@@ -18,14 +21,19 @@ class Channel extends Aggregate implements ChannelInterface
             return $this->isVerified;
         }
     }
+    /**
+     * @var Collection<Subscription>
+     */
+    private Collection $subscriptions;
 
     public function __construct(
-        private Uuid $id,
-        private readonly Subscription $subscription,
+        private readonly Uuid $id,
+        private readonly string $ownerId,
         private array $data,
-        private ChannelType $type,
+        private readonly ChannelType $type,
     ) {
         $this->isVerified = false;
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function verify(string $verificationValue): bool
@@ -54,9 +62,9 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->id;
     }
 
-    public function getSubscription(): Subscription
+    public function getSubscriptions(): Collection
     {
-        return $this->subscription;
+        return $this->subscriptions;
     }
 
     public function getData(): array
@@ -64,9 +72,26 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->data;
     }
 
-    public function setSecret(string $secret): void
+    public function setSecret(#[SensitiveParameter] string $secret): void
     {
         $this->secret = $secret;
+    }
+
+    public function addSubscription(Subscription $subscription): void
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+        }
+    }
+
+    public function removeSubscription(Subscription $subscription): void
+    {
+        $this->subscriptions->removeElement($subscription);
+    }
+
+    public function getOwnerId(): string
+    {
+        return $this->ownerId;
     }
 
 }

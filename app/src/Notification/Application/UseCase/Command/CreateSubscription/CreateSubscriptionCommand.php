@@ -12,7 +12,6 @@ final readonly class CreateSubscriptionCommand implements CommandInterface
         public string $subscriberId,
         public array $phoneNumbers,
         public array $events,
-        public array $channels
     ) {
     }
 }

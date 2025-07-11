@@ -12,11 +12,6 @@ class SubscriptionMapper
     public function getValidationCollectionSubscription(): Assert\Collection
     {
         return new Assert\Collection([
-            'subscriber_id' => [
-                new Assert\NotBlank(),
-                new Assert\Type('string'),
-                new Assert\Length(max: 36),
-            ],
             'phone_numbers' => new Assert\All([
                 new Assert\NotBlank(),
                 new Assert\Type('numeric'),
@@ -27,20 +22,20 @@ class SubscriptionMapper
                     message: sprintf('Invalid event type. Allowed: %s.',
                         implode(', ', EventType::values())))
             ]),
-            'channels' => new Assert\Collection([
-                'telegram' => new Assert\Collection([
-                    'channel_id' => [
-                        new Assert\NotBlank(allowNull: true),
-                        new Assert\Type('string'),
-                    ]
-                ]),
-                'email' => new Assert\Collection([
-                    'email' => [
-                        new Assert\NotBlank(),
-                        new Assert\Email(),
-                    ]
-                ]),
-            ]),
+//            'channels' => new Assert\Collection([
+//                'telegram' => new Assert\Collection([
+//                    'channel_id' => [
+//                        new Assert\NotBlank(allowNull: true),
+//                        new Assert\Type('string'),
+//                    ]
+//                ]),
+//                'email' => new Assert\Collection([
+//                    'email' => [
+//                        new Assert\NotBlank(),
+//                        new Assert\Email(),
+//                    ]
+//                ]),
+//            ]),
 
         ],
             allowExtraFields: false);

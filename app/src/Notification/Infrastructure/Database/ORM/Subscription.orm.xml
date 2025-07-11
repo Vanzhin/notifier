@@ -7,16 +7,19 @@
             <generator strategy="NONE"/>
         </id>
         <field name="subscriberId" length="36"/>
-        <one-to-many field="channels" target-entity="App\Notification\Domain\Aggregate\Channel"
-                     mapped-by="subscription">
-            <order-by>
-                <order-by-field name="type" direction="DESC"/>
-            </order-by>
+        <many-to-many field="channels" target-entity="App\Notification\Domain\Aggregate\Channel">
+            <join-table name="notification_subscription_channel">
+                <join-columns>
+                    <join-column name="subscription_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="channel_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
             <cascade>
                 <cascade-persist/>
-                <cascade-remove/>
             </cascade>
-        </one-to-many>
+        </many-to-many>
         <many-to-many field="phoneNumbers" target-entity="App\Notification\Domain\Aggregate\PhoneNumber">
             <join-table name="notification_subscription_phone_number">
                 <join-columns>

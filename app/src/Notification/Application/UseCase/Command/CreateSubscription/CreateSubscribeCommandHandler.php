@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notification\Application\UseCase\Command\CreateSubscription;
 
-use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Aggregate\PhoneNumber;
-use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Factory\SubscriptionFactoryInterface;
 use App\Notification\Domain\Repository\PhoneRepositoryInterface;
@@ -30,16 +28,6 @@ readonly class CreateSubscribeCommandHandler implements CommandHandlerInterface
     {
         $subscription = $this->subscriptionFactory->create($createSubscriptionCommand->subscriberId);
 
-        foreach ($createSubscriptionCommand->channels as $type => $params) {
-            $channel = new Channel(
-                Uuid::v4(),
-                $subscription,
-                $params, ChannelType::from($type)
-            );
-
-            $subscription->addChannel($channel);
-//            $this->channelVerifier->initiateVerification($channel);
-        }
         foreach ($createSubscriptionCommand->events as $event) {
             $subscription->addEvent(EventType::from($event));
         }

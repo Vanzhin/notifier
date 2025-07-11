@@ -30,10 +30,6 @@ readonly class SubscriptionCreatedEventHandler implements EventHandlerInterface
         if ($subscription->getPhoneNumbers()->isEmpty()) {
             throw new AppException('Необходимо внести хотя бы один телефонный номер для подписки.');
         }
-
-        if ($subscription->getChannels()->isEmpty()) {
-            throw new AppException('Необходимо внести хотя бы один канал номер для подписки.');
-        }
     }
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notification\Domain\Aggregate;
 
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
+use Doctrine\Common\Collections\Collection;
 
 interface ChannelInterface
 {
@@ -18,7 +19,7 @@ interface ChannelInterface
 
     public function getVerificationData(): array;
 
-    public function getSubscription(): Subscription;
+    public function getSubscriptions(): Collection;
 
     public function getData(): array;
 }
