@@ -24,7 +24,11 @@ class Channel extends Aggregate implements ChannelInterface
     /**
      * @var Collection<Subscription>
      */
-    private Collection $subscriptions;
+    public Collection $subscriptions {
+        get {
+            return $this->subscriptions;
+        }
+    }
 
     public function __construct(
         private readonly Uuid $id,
@@ -62,11 +66,6 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->id;
     }
 
-    public function getSubscriptions(): Collection
-    {
-        return $this->subscriptions;
-    }
-
     public function getData(): array
     {
         return $this->data;
@@ -92,6 +91,11 @@ class Channel extends Aggregate implements ChannelInterface
     public function getOwnerId(): string
     {
         return $this->ownerId;
+    }
+
+    public function isOwnedBy(string $userId): bool
+    {
+        return $this->ownerId === $userId;
     }
 
 }

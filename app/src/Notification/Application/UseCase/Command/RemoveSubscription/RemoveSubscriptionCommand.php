@@ -8,7 +8,7 @@ use App\Shared\Application\Command\CommandInterface;
 
 readonly class RemoveSubscriptionCommand implements CommandInterface
 {
-    public function __construct(public string $subscriptionId)
+    public function __construct(public string $subscriptionId, public string $userId)
     {
     }
 }

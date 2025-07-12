@@ -12,7 +12,7 @@ readonly class SubscriptionDTOTransformer
     {
     }
 
-    public function fromEntity(Subscription $entity): SubscriptionDTO
+    public function fromEntity(Subscription $entity, bool $withChannels = true): SubscriptionDTO
     {
         $events = [];
         foreach ($entity->getSubscriptionEvents() as $event) {
@@ -28,7 +28,7 @@ readonly class SubscriptionDTOTransformer
             $entity->getSubscriberId(),
             $phoneNumbers,
             $events,
-            $this->channelDTOTransformer->fromEntityList($entity->getChannels()->toArray()),
+            $withChannels ? $this->channelDTOTransformer->fromEntityList($entity->getChannels()->toArray()) : null,
             $entity->isActive(),
             $entity->getCreatedAt(),
         );

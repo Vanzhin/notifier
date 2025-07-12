@@ -8,7 +8,7 @@ use App\Shared\Application\Query\Query;
 
 readonly class FindSubscriptionQuery extends Query
 {
-    public function __construct(public string $subscriptionId)
+    public function __construct(public string $subscriptionId, public string $userId)
     {
     }
 }

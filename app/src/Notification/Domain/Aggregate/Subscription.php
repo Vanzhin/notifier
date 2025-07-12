@@ -130,4 +130,9 @@ class Subscription extends Aggregate
     {
         return $this->phoneNumbers;
     }
+
+    public function isOwnedBy(string $userId): bool
+    {
+        return $this->subscriberId === $userId;
+    }
 }

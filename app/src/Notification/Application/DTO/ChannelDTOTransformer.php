@@ -5,17 +5,28 @@ declare(strict_types=1);
 namespace App\Notification\Application\DTO;
 
 use App\Notification\Domain\Aggregate\Channel;
+use Doctrine\Common\Collections\Collection;
 
-class ChannelDTOTransformer
+readonly class ChannelDTOTransformer
 {
-    public function fromEntity(Channel $entity): ChannelDTO
+
+    public function fromEntity(Channel $entity, array $with = []): ChannelDTO
     {
-        return new ChannelDTO(
+        $channelDTO = new ChannelDTO(
             $entity->getId()->toString(),
             $entity->getData(),
             $entity->getType()->value,
             $entity->isVerified,
         );
+        foreach ($with as $relation) {
+            if (isset($entity->$relation)) {
+                match ($relation) {
+                    'subscriptions' => $this->addSubscriptions($channelDTO, $entity->$relation),
+                };
+            }
+        }
+
+        return $channelDTO;
     }
 
     public function fromEntityList(array $channels): array
@@ -26,5 +37,15 @@ class ChannelDTOTransformer
         }
 
         return $channelDTOs;
+    }
+
+    private function addSubscriptions(ChannelDTO $channelDTO, Collection $subscriptions): void
+    {
+        $subscriptionDTOTransformer = new SubscriptionDTOTransformer($this);
+        $subscriptionDTOs = [];
+        foreach ($subscriptions as $subscription) {
+            $subscriptionDTOs[] = $subscriptionDTOTransformer->fromEntity($subscription, withChannels: false);
+        }
+        $channelDTO->subscriptions = $subscriptionDTOs;
     }
 }

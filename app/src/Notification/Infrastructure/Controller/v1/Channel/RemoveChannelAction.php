@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Notification\Infrastructure\Controller\v1\Subscription;
+namespace App\Notification\Infrastructure\Controller\v1\Channel;
 
-use App\Notification\Application\UseCase\Command\RemoveSubscription\RemoveSubscriptionCommand;
+use App\Notification\Application\UseCase\Command\RemoveChannel\RemoveChannelCommand;
 use App\Shared\Application\Command\CommandBusInterface;
 use App\Shared\Domain\Service\JwtValidatorService;
 use App\Shared\Infrastructure\Controller\JwtCheckController;
@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-#[Route('subscription/{id}', requirements: ['id' => Requirement::UUID_V4], methods: ['DELETE'])]
-class RemoveSubscriptionAction extends JwtCheckController
+#[Route('channel/{id}', requirements: ['id' => Requirement::UUID_V4], methods: ['DELETE'])]
+class RemoveChannelAction extends JwtCheckController
 {
     public function __construct(
         private readonly CommandBusInterface $commandBus,
@@ -25,7 +25,8 @@ class RemoveSubscriptionAction extends JwtCheckController
 
     public function __invoke(string $id, Request $request): JsonResponse
     {
-        $query = new RemoveSubscriptionCommand(subscriptionId: $id, userId: $this->getUserId($request));
+        $userId = $this->getUserId($request);
+        $query = new RemoveChannelCommand(channelId: $id, ownerId: $userId,);
         $this->commandBus->execute($query);
 
         return new JsonResponse(null);

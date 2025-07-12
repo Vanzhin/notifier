@@ -26,4 +26,10 @@ final class ChannelRepository extends ServiceEntityRepository implements Channel
     {
         return $this->find($channelId);
     }
+
+    public function remove(Channel $channel): void
+    {
+        $this->getEntityManager()->remove($channel);
+        $this->getEntityManager()->flush();
+    }
 }

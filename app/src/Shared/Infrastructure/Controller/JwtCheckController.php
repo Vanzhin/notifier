@@ -27,4 +27,10 @@ class JwtCheckController extends AbstractController
         return $this->jwtValidatorService->validateAndGetPayload($token);
     }
 
+    protected function getUserId(Request $request): ?string
+    {
+        return $this->getJwtPayload($request)['user_id'] ?? null;
+    }
+
+
 }

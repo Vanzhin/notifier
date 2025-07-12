@@ -12,7 +12,7 @@ use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
 use App\Shared\Application\Command\CommandHandlerInterface;
 use Symfony\Component\Uid\Uuid;
 
-readonly class CreateSubscribeCommandHandler implements CommandHandlerInterface
+readonly class CreateSubscriptionCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private SubscriptionRepositoryInterface $subscriptionRepository,
@@ -41,6 +41,9 @@ readonly class CreateSubscribeCommandHandler implements CommandHandlerInterface
         return $subscription->getId()->toString();
     }
 
+    /**
+     * @throws \Exception
+     */
     private function createPhoneIfNotExists(string $phone): PhoneNumber
     {
         $phone = new PhoneNumber(
