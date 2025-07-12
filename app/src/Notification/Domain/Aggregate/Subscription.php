@@ -8,6 +8,7 @@ use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Event\SubscriptionCreatedEvent;
 use App\Shared\Domain\Aggregate\Aggregate;
+use App\Shared\Infrastructure\Exception\AppException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
@@ -17,16 +18,28 @@ class Subscription extends Aggregate
     /**
      * @var Collection<EventType>
      */
-    private Collection $subscriptionEvents;
+    public Collection $subscriptionEvents {
+        get {
+            return $this->subscriptionEvents;
+        }
+    }
     /**
      * @var Collection<Channel>
      */
-    private Collection $channels;
+    public Collection $channels {
+        get {
+            return $this->channels;
+        }
+    }
 
     /**
      * @var Collection<PhoneNumber>
      */
-    private Collection $phoneNumbers;
+    public Collection $phoneNumbers {
+        get {
+            return $this->phoneNumbers;
+        }
+    }
 
     private \DateTimeImmutable $createdAt;
 
@@ -46,11 +59,6 @@ class Subscription extends Aggregate
         return $this->id;
     }
 
-    public function getSubscriptionEvents(): Collection
-    {
-        return $this->subscriptionEvents;
-    }
-
     public function getSubscriberId(): string
     {
         return $this->subscriberId;
@@ -68,10 +76,18 @@ class Subscription extends Aggregate
         $this->subscriptionEvents->removeElement($eventType);
     }
 
+    /**
+     * @throws AppException
+     */
     public function addChannel(Channel $channel): void
     {
+        //todo пока так
         if (!$this->channels->contains($channel)) {
-            $this->channels->add($channel);
+            if ($this->isOwnedBy($channel->getOwnerId())) {
+                $this->channels->add($channel);
+            } else {
+                throw new AppException('Channel cannot be added.');
+            }
         }
     }
 
@@ -116,19 +132,9 @@ class Subscription extends Aggregate
         });
     }
 
-    public function getChannels(): Collection
-    {
-        return $this->channels;
-    }
-
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function getPhoneNumbers(): Collection
-    {
-        return $this->phoneNumbers;
     }
 
     public function isOwnedBy(string $userId): bool

@@ -23,11 +23,11 @@ readonly class SubscriptionCreatedEventHandler implements EventHandlerInterface
         AssertService::notNull($subscription, 'Подписка не найдена.');
 
         // проверяем, что объект имеет хотя бы по одному объекту в соответствующих коллекциях
-        if ($subscription->getSubscriptionEvents()->isEmpty()) {
+        if ($subscription->subscriptionEvents->isEmpty()) {
             throw new AppException('Необходимо внести хотя бы одно событие для подписки.');
         }
 
-        if ($subscription->getPhoneNumbers()->isEmpty()) {
+        if ($subscription->phoneNumbers->isEmpty()) {
             throw new AppException('Необходимо внести хотя бы один телефонный номер для подписки.');
         }
     }
