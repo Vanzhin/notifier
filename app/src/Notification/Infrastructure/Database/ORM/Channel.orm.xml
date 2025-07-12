@@ -14,6 +14,9 @@
         </field>
         <field name="type" column="type" type="string"
                enum-type="App\Notification\Domain\Aggregate\ValueObject\ChannelType" length="50"/>
+        <many-to-many field="subscriptions" mapped-by="channels"
+                      target-entity="App\Notification\Domain\Aggregate\Subscription">
+        </many-to-many>
         <field name="isVerified" type="boolean" column="is_verified"/>
         <field name="secret" length="100" nullable="true"/>
         <indexes>

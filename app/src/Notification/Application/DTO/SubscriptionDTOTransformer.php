@@ -23,14 +23,18 @@ readonly class SubscriptionDTOTransformer
             $phoneNumbers[] = $phone->getPhone();
         }
 
-        return new SubscriptionDTO(
+        $dto = new SubscriptionDTO(
             $entity->getId()->toString(),
             $entity->getSubscriberId(),
             $phoneNumbers,
             $events,
-            $withChannels ? $this->channelDTOTransformer->fromEntityList($entity->channels->toArray()) : null,
             $entity->isActive(),
             $entity->getCreatedAt(),
         );
+        if ($withChannels) {
+            $dto->channels = $this->channelDTOTransformer->fromEntityList($entity->channels->toArray());
+        }
+
+        return $dto;
     }
 }

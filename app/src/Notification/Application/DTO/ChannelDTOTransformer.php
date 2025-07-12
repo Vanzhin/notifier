@@ -19,9 +19,9 @@ readonly class ChannelDTOTransformer
             $entity->isVerified,
         );
         foreach ($with as $relation) {
-            if (isset($entity->$relation)) {
+            if (property_exists($entity, $relation)) {
                 match ($relation) {
-                    'subscriptions' => $this->addSubscriptions($channelDTO, $entity->$relation),
+                    'subscriptions' => $this->addSubscriptions($channelDTO, $entity->getSubscriptions()),
                 };
             }
         }

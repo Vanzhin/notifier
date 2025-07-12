@@ -19,9 +19,7 @@ interface ChannelInterface
 
     public function getVerificationData(): array;
 
-    public Collection $subscriptions {
-        get;
-    }
+    public function getSubscriptions(): Collection;
 
     public function getData(): array;
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notification\Infrastructure\Controller\v1\Subscription;
 
-use App\Notification\Application\UseCase\Command\AddChannelToSubscription\AddChannelToSubscriptionCommand;
+use App\Notification\Application\UseCase\Command\DetachChannelFromSubscription\DetachChannelFromSubscriptionCommand;
 use App\Shared\Application\Command\CommandBusInterface;
 use App\Shared\Domain\Service\JwtValidatorService;
 use App\Shared\Infrastructure\Controller\JwtCheckController;
@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-#[Route('subscription/{subscriptionId}/channel/{channelId}/add', requirements: [
+#[Route('subscription/{subscriptionId}/channel/{channelId}/remove', requirements: [
     'subscriptionId' => Requirement::UUID_V4,
     'channelId' => Requirement::UUID_V4
 ], methods: ['PATCH'])]
-class AddChannelToSubscriptionAction extends JwtCheckController
+class RemoveChannelFromSubscriptionAction extends JwtCheckController
 {
     public function __construct(
         private readonly CommandBusInterface $commandBus,
@@ -29,7 +29,7 @@ class AddChannelToSubscriptionAction extends JwtCheckController
     public function __invoke(string $subscriptionId, string $channelId, Request $request): JsonResponse
     {
         $userId = $this->getUserId($request);
-        $command = new AddChannelToSubscriptionCommand($subscriptionId, $channelId, $userId);
+        $command = new DetachChannelFromSubscriptionCommand($subscriptionId, $channelId, $userId);
         $this->commandBus->execute($command);
 
         return new JsonResponse(null);

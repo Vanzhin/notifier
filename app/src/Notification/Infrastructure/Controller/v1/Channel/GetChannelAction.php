@@ -26,7 +26,7 @@ class GetChannelAction extends JwtCheckController
     public function __invoke(string $id, Request $request): JsonResponse
     {
         $userId = $this->getUserId($request);
-        $query = new FindChannelQuery(channelId: $id, ownerId: $userId,);
+        $query = new FindChannelQuery(channelId: $id, ownerId: $userId);
         $result = $this->queryBus->execute($query);
 
         return new JsonResponse($result->channel);

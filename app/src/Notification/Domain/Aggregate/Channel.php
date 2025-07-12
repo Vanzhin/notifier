@@ -24,11 +24,7 @@ class Channel extends Aggregate implements ChannelInterface
     /**
      * @var Collection<Subscription>
      */
-    public Collection $subscriptions {
-        get {
-            return $this->subscriptions;
-        }
-    }
+    private Collection $subscriptions;
 
     public function __construct(
         private readonly Uuid $id,
@@ -36,8 +32,8 @@ class Channel extends Aggregate implements ChannelInterface
         private array $data,
         private readonly ChannelType $type,
     ) {
-        $this->isVerified = false;
         $this->subscriptions = new ArrayCollection();
+        $this->isVerified = false;
     }
 
     public function verify(string $verificationValue): bool
@@ -74,6 +70,11 @@ class Channel extends Aggregate implements ChannelInterface
     public function setSecret(#[SensitiveParameter] string $secret): void
     {
         $this->secret = $secret;
+    }
+
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
     }
 
     public function addSubscription(Subscription $subscription): void
