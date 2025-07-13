@@ -24,6 +24,7 @@ framework:
         routing:
             # Route your messages to the transports
             'App\Notification\Domain\Message\ChannelVerificationCodeGetMessage': async  # Назначаем маршрут для наших сообщений
+            'App\Notification\Domain\Message\ChannelVerificationFailedMessage': async
 
 
 # when@test:

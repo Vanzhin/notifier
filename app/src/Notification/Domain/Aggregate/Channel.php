@@ -7,6 +7,7 @@ namespace App\Notification\Domain\Aggregate;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Event\ChannelVerifiedEvent;
 use App\Shared\Domain\Aggregate\Aggregate;
+use App\Shared\Infrastructure\Exception\AppException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use SensitiveParameter;
@@ -69,6 +70,9 @@ class Channel extends Aggregate implements ChannelInterface
 
     public function setSecret(#[SensitiveParameter] string $secret): void
     {
+        if ($this->isVerified) {
+            throw new AppException('Нельзя установить секрет для верифицированного канала.');
+        }
         $this->secret = $secret;
     }
 
@@ -104,8 +108,17 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->channel;
     }
 
-    public function setChannel(?string $channel): void
+    /**
+     * @throws AppException
+     */
+    public function setChannel(string $channel): void
     {
+        if ($this->isVerified) {
+            throw new AppException('Channel is already verified, cannot change channel.');
+        }
+        if ($this->channel) {
+            throw new AppException('Channel is already has channel.');
+        }
         $this->channel = $channel;
     }
 
@@ -113,4 +126,14 @@ class Channel extends Aggregate implements ChannelInterface
     {
         return $this->isVerified;
     }
+
+    private function checkChannel(string $channel): bool
+    {
+        return match ($this->type) {
+            ChannelType::TELEGRAM => ctype_digit($channel),
+            ChannelType::EMAIL => (bool)filter_var($channel, FILTER_VALIDATE_EMAIL),
+            default => false,
+        };
+    }
+
 }

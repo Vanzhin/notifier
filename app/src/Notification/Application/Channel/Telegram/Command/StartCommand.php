@@ -8,6 +8,7 @@ use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Message\ChannelVerificationCodeGetMessage;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Shared\Application\Message\MessageBusInterface;
+use App\Shared\Infrastructure\Exception\AppException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -53,9 +54,13 @@ class StartCommand extends UserCommand
         }
 
         $channel = $this->findChannelByVerificationCode($verificationCode);
+        self::$notifierLogger->error(json_encode(['code' => $verificationCode, 'channel' => $channel?->getId()]));
 
         if (!$channel) {
-            return $this->replyWithVerificationError($text, 'Канал не найден.');
+            return $this->replyWithVerificationError($text, 'Канал не найден или код верификации не верен.');
+        }
+        if ($channel->isVerified()) {
+            return $this->replyWithSuccess($text, 'Канал уже верифицирован.');
         }
         $this->addChannelToChannel($channel, (string)$chatId);
 
@@ -77,6 +82,9 @@ class StartCommand extends UserCommand
         return self::$channelRepository->findBySecret($code);
     }
 
+    /**
+     * @throws AppException
+     */
     private function addChannelToChannel(Channel $channel, string $chan): void
     {
         $channel->setChannel($chan);
@@ -101,6 +109,7 @@ class StartCommand extends UserCommand
     private function getVerificationCodeFromMessage(Message $message): ?string
     {
         $code = str_replace($this->usage, "", $message->getText());
+
         if (empty($code)) {
             return null;
         }
