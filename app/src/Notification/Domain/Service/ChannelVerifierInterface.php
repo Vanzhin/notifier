@@ -8,7 +8,6 @@ use App\Notification\Domain\Aggregate\Channel;
 
 interface ChannelVerifierInterface
 {
-
     public function supports(Channel $channel): bool;
 
     public function initiateChannelVerification(Channel $channel): string;

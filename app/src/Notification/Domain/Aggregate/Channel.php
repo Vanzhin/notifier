@@ -16,11 +16,7 @@ class Channel extends Aggregate implements ChannelInterface
 {
     private ?string $secret = null;
 
-    public bool $isVerified {
-        get {
-            return $this->isVerified;
-        }
-    }
+    private bool $isVerified;
     /**
      * @var Collection<Subscription>
      */
@@ -31,6 +27,7 @@ class Channel extends Aggregate implements ChannelInterface
         private readonly string $ownerId,
         private array $data,
         private readonly ChannelType $type,
+        private ?string $channel = null,
     ) {
         $this->subscriptions = new ArrayCollection();
         $this->isVerified = false;
@@ -39,6 +36,9 @@ class Channel extends Aggregate implements ChannelInterface
     public function verify(string $verificationValue): bool
     {
         if ($this->secret !== $verificationValue) {
+            return false;
+        }
+        if ($this->channel === null) {
             return false;
         }
         $this->isVerified = true;
@@ -99,4 +99,18 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->ownerId === $userId;
     }
 
+    public function getChannel(): ?string
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(?string $channel): void
+    {
+        $this->channel = $channel;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
 }

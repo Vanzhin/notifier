@@ -12,6 +12,7 @@ final readonly class CreateChannelCommand implements CommandInterface
         public string $ownerId,
         public string $type,
         public array $data,
+        public ?string $channel,
     ) {
     }
 }

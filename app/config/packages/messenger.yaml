@@ -1,6 +1,6 @@
 framework:
     messenger:
-#        failure_transport: failed
+        failure_transport: failed
         default_bus: command.bus
         buses:
             command.bus:
@@ -12,18 +12,19 @@ framework:
                 default_middleware: allow_no_handlers
 
         transports:
-#            async:
-#                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'  # Основной транспорт
-#                retry_strategy:
-#                    max_retries: 3
-#                    delay: 1000    # Задержка между ретраями
-#                    multiplier: 2  # Увеличиваем задержку на 2 раза
-#                    max_delay: 30000  # Максимальная задержка между ретраями
-#            failed: 'doctrine://default?queue_name=failed'
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'  # Основной транспорт
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000    # Задержка между ретраями
+                    multiplier: 2  # Увеличиваем задержку на 2 раза
+                    max_delay: 30000  # Максимальная задержка между ретраями
+            failed: '%env(MESSENGER_TRANSPORT_DEFAULT_DSN)%'
 
         routing:
-        # Route your messages to the transports
-        # 'App\Message\YourMessage': async
+            # Route your messages to the transports
+            'App\Notification\Domain\Message\ChannelVerificationCodeGetMessage': async  # Назначаем маршрут для наших сообщений
+
 
 # when@test:
 #    framework:

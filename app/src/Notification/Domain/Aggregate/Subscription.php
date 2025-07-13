@@ -115,7 +115,7 @@ class Subscription extends Aggregate
 
     public function isActive(): bool
     {
-        if (array_any($this->channels->toArray(), fn($channel) => !$channel->isVerified)) {
+        if (array_any($this->channels->toArray(), fn($channel) => !$channel->isVerified())) {
             return false;
         }
 

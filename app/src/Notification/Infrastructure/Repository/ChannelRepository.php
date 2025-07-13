@@ -32,4 +32,9 @@ final class ChannelRepository extends ServiceEntityRepository implements Channel
         $this->getEntityManager()->remove($channel);
         $this->getEntityManager()->flush();
     }
+
+    public function findBySecret(string $secret): ?Channel
+    {
+        return $this->findOneBy(['secret' => $secret]);
+    }
 }

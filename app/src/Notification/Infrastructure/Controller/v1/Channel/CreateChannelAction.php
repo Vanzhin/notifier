@@ -45,6 +45,7 @@ class CreateChannelAction extends JwtCheckController
             $userId,
             $type,
             $data,
+            $channel,
         );
         $channel_id = $this->commandBus->execute($command);
 

@@ -16,7 +16,7 @@ readonly class ChannelDTOTransformer
             $entity->getId()->toString(),
             $entity->getData(),
             $entity->getType()->value,
-            $entity->isVerified,
+            $entity->isVerified(),
         );
         foreach ($with as $relation) {
             if (property_exists($entity, $relation)) {

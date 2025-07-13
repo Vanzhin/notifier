@@ -12,6 +12,8 @@ interface ChannelRepositoryInterface
 
     public function findById(string $channelId): ?Channel;
 
+    public function findBySecret(string $secret): ?Channel;
+
     public function remove(Channel $channel): void;
 
 }

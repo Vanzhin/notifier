@@ -20,6 +20,9 @@ class WebhookAction extends AbstractController
     ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function __invoke(Request $request): Response
     {
         $this->telegramBotService->handle();

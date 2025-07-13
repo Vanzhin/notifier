@@ -11,10 +11,6 @@ interface ChannelInterface
 {
     public function verify(string $verificationValue): bool;
 
-    public bool $isVerified {
-        get;
-    }
-
     public function getType(): ChannelType;
 
     public function getVerificationData(): array;

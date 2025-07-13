@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Notification\Application\Channel\Telegram\Service;
 
+use App\Notification\Application\Channel\Telegram\Command\StartCommand;
 use App\Notification\Domain\Aggregate\ChannelInterface;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
+use App\Notification\Domain\Repository\ChannelRepositoryInterface;
+use App\Shared\Application\Message\MessageBusInterface;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
@@ -18,9 +21,15 @@ final readonly class TelegramBotService
         private string $webhookUrl,
         private string $commandPath,
         private Telegram $telegram,
-        private LoggerInterface $logger,
+        private LoggerInterface $notifierLogger,
+        private MessageBusInterface $messageBus,
+        private ChannelRepositoryInterface $channelRepository,
     ) {
         $this->addCommandsPath();
+        //todo костыль убрать
+        StartCommand::setLogger($this->notifierLogger);
+        StartCommand::setMessageBus($this->messageBus);
+        StartCommand::setRepository($this->channelRepository);
     }
 
     /**
@@ -30,21 +39,6 @@ final readonly class TelegramBotService
     public function setWebhook(): ServerResponse
     {
         return $this->telegram->setWebhook($this->webhookUrl);
-    }
-
-    /**
-     * Отправка уведомления через Telegram
-     */
-    public function sendNotification(Notification $notification): ServerResponse
-    {
-        if (!$this->supports($notification->getChannel())) {
-            throw new \InvalidArgumentException('Unsupported channel type');
-        }
-
-        $chatId = $notification->getRecipient()->getTelegramChatId();
-        $message = $notification->getMessage();
-
-        return $this->sendMessage($chatId, $message);
     }
 
     /**
@@ -59,17 +53,9 @@ final readonly class TelegramBotService
                 'parse_mode' => 'HTML',
             ], $options);
 
-            $response = Request::sendMessage($params);
-
-            $this->logger->debug('Telegram message sent', [
-                'chat_id' => $chatId,
-                'text' => $text,
-                'response' => $response->getResult()
-            ]);
-
-            return $response;
+            return Request::sendMessage($params);
         } catch (\Exception $e) {
-            $this->logger->error('Failed to send Telegram message', [
+            $this->notifierLogger->error('Failed to send Telegram message', [
                 'chat_id' => $chatId,
                 'error' => $e->getMessage()
             ]);
@@ -85,7 +71,7 @@ final readonly class TelegramBotService
         try {
             $this->telegram->handle();
         } catch (\Exception $e) {
-            $this->logger->error('Telegram bot handling failed', ['error' => $e->getMessage()]);
+            $this->notifierLogger->error('Telegram bot handling failed', ['error' => $e->getMessage()]);
             throw $e;
         }
     }

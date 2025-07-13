@@ -38,6 +38,8 @@ final readonly class TelegramChannelVerifier implements ChannelVerifierInterface
         if (!$isVerified) {
             throw new AppException('The channel verification data is invalid.');
         }
+
+        $this->channelRepository->save($channel);
     }
 
     public function supports(Channel $channel): bool

@@ -12,13 +12,14 @@
                 <option name="default">[]</option>
             </options>
         </field>
-        <field name="type" column="type" type="string"
+        <field name="type" column="type"
                enum-type="App\Notification\Domain\Aggregate\ValueObject\ChannelType" length="50"/>
         <many-to-many field="subscriptions" mapped-by="channels"
                       target-entity="App\Notification\Domain\Aggregate\Subscription">
         </many-to-many>
         <field name="isVerified" type="boolean" column="is_verified"/>
-        <field name="secret" length="100" nullable="true"/>
+        <field name="secret" length="100" nullable="true" unique="true"/>
+        <field name="channel" length="50" nullable="true"/>
         <indexes>
             <index name="channel_data_idx" columns="data"/>
         </indexes>

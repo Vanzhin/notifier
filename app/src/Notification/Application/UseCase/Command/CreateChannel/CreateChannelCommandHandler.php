@@ -25,7 +25,10 @@ readonly class CreateChannelCommandHandler implements CommandHandlerInterface
         $channel = new Channel(
             Uuid::v4(),
             $command->ownerId,
-            $command->data, ChannelType::from($command->type));
+            $command->data,
+            ChannelType::from($command->type),
+            $command->channel
+        );
         $this->channelRepository->save($channel);
 
         return $channel->getId()->toString();

@@ -8,7 +8,7 @@ use App\Notification\Domain\Aggregate\Channel;
 
 class ChannelAccessControl
 {
-
+// пока так , потом можно ввести систему ролей
     /**
      * Может ли пользователь удалить канал?
      */
@@ -21,6 +21,14 @@ class ChannelAccessControl
      * Может ли пользователь смотреть канал?
      */
     public function canViewChannel(Channel $channel, string $userId): bool
+    {
+        return $channel->isOwnedBy($userId);
+    }
+
+    /**
+     * Может ли пользователь инициировать верификацию канала?
+     */
+    public function canInitVerificationChannel(Channel $channel, string $userId): bool
     {
         return $channel->isOwnedBy($userId);
     }

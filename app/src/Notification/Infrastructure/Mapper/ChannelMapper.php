@@ -16,7 +16,8 @@ class ChannelMapper
                 message: sprintf('Неверный тип канала. Поддерживаются: %s.',
                     implode(', ', ChannelType::values()))),
             'data' => new Assert\Required(
-                $this->getDataValidation($data['type'] ?? ''))
+                $this->getDataValidation($data['type'] ?? '')),
+            'channel' => $this->getChannelValidation($data['type'] ?? ''),
         ],
             allowExtraFields: false);
     }
@@ -40,5 +41,22 @@ class ChannelMapper
         };
 
         return new Assert\Collection($constrains);
+    }
+
+    private function getChannelValidation(string $channelType): array
+    {
+        return match ($channelType) {
+            'telegram' => [
+                new Assert\NotBlank(allowNull: true),
+                new Assert\Type('string'),
+
+            ],
+            'email' => [
+                new Assert\NotBlank(),
+                new Assert\Email(),
+
+            ],
+            default => []
+        };
     }
 }
