@@ -17,32 +17,22 @@ use Psr\Log\LoggerInterface;
 
 class StartCommand extends UserCommand
 {
-    private static LoggerInterface $notifierLogger;
-    private static MessageBusInterface $messageBus;
-    private static ChannelRepositoryInterface $channelRepository;
-
-    public static function setLogger(LoggerInterface $notifierLogger): void
-    {
-        self::$notifierLogger = $notifierLogger;
-    }
-
-    public static function setMessageBus(MessageBusInterface $messageBus): void
-    {
-        self::$messageBus = $messageBus;
-    }
-
-    public static function setRepository(ChannelRepositoryInterface $channelRepository): void
-    {
-        self::$channelRepository = $channelRepository;
-    }
+    private LoggerInterface $logger;
+    private MessageBusInterface $messageBus;
+    private ChannelRepositoryInterface $channelRepository;
 
     protected $name = 'start';
     protected $description = 'Start command';
     protected $usage = '/start';
     protected $version = '1.0';
 
+    /**
+     * @throws AppException
+     * @throws TelegramException
+     */
     public function execute(): ServerResponse
     {
+        $this->initConfig();
         $message = $this->getMessage();
         $chatId = $message->getChat()->getId();
         $text = $this->buildDefaultTextMessage($message);
@@ -54,7 +44,6 @@ class StartCommand extends UserCommand
         }
 
         $channel = $this->findChannelByVerificationCode($verificationCode);
-        self::$notifierLogger->error(json_encode(['code' => $verificationCode, 'channel' => $channel?->getId()]));
 
         if (!$channel) {
             return $this->replyWithVerificationError($text, 'Канал не найден или код верификации не верен.');
@@ -79,7 +68,7 @@ class StartCommand extends UserCommand
 
     private function findChannelByVerificationCode(string $code): ?Channel
     {
-        return self::$channelRepository->findBySecret($code);
+        return $this->channelRepository->findBySecret($code);
     }
 
     /**
@@ -88,12 +77,12 @@ class StartCommand extends UserCommand
     private function addChannelToChannel(Channel $channel, string $chan): void
     {
         $channel->setChannel($chan);
-        self::$channelRepository->save($channel);
+        $this->channelRepository->save($channel);
     }
 
     private function dispatchChannelVerificationEvent(string $verificationCode, string $channelId): void
     {
-        self::$messageBus->executeMessages(
+        $this->messageBus->executeMessages(
             new ChannelVerificationCodeGetMessage($channelId, $verificationCode)
         );
     }
@@ -119,7 +108,6 @@ class StartCommand extends UserCommand
 
     private function buildDefaultTextMessage(Message $message): string
     {
-        $message = $this->getMessage();
         $first_name = $message->getFrom()->getFirstName();
 
         // Основное приветственное сообщение
@@ -128,4 +116,11 @@ class StartCommand extends UserCommand
 
         return $text;
     }
+    private function initConfig(): void
+    {
+        $this->logger = $this->config['logger'];
+        $this->messageBus = $this->config['messageBus'];
+        $this->channelRepository = $this->config['channelRepository'];
+    }
+
 }

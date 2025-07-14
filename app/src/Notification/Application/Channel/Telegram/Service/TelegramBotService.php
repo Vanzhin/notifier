@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Notification\Application\Channel\Telegram\Service;
 
-use App\Notification\Application\Channel\Telegram\Command\StartCommand;
 use App\Notification\Domain\Aggregate\ChannelInterface;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
@@ -26,10 +25,7 @@ final readonly class TelegramBotService
         private ChannelRepositoryInterface $channelRepository,
     ) {
         $this->addCommandsPath();
-        //todo костыль убрать
-        StartCommand::setLogger($this->notifierLogger);
-        StartCommand::setMessageBus($this->messageBus);
-        StartCommand::setRepository($this->channelRepository);
+        $this->configureCommands();
     }
 
     /**
@@ -95,5 +91,36 @@ final readonly class TelegramBotService
     private function addCommandsPath(): void
     {
         $this->telegram->addCommandsPath($this->commandPath);
+    }
+
+    private function configureCommands(): void
+    {
+        // Общие зависимости для всех команд
+        $commonConfig = [
+            'logger' => $this->notifierLogger,
+        ];
+
+        // Специфические зависимости для отдельных команд
+        $specificConfigs = [
+            'start' => [
+                'messageBus' => $this->messageBus,
+                'channelRepository' => $this->channelRepository,
+            ],
+            'get_channel_subscriptions' => [
+                'messageBus' => $this->messageBus,
+                'channelRepository' => $this->channelRepository,
+            ],
+
+        ];
+
+        foreach ($this->telegram->getCommandsList() as $command) {
+            // Объединяем общие и специфические конфиги
+            $config = array_merge(
+                $commonConfig,
+                $specificConfigs[$command->getName()] ?? []
+            );
+
+            $this->telegram->setCommandConfig($command->getName(), $config);
+        }
     }
 }

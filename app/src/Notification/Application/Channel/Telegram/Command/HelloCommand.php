@@ -6,9 +6,11 @@ namespace App\Notification\Application\Channel\Telegram\Command;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
+use Psr\Log\LoggerInterface;
 
 class HelloCommand extends UserCommand
 {
+    private LoggerInterface $logger;
     protected $name = 'hello';
     protected $description = 'Hello command';
     protected $usage = '/hello';
@@ -16,6 +18,8 @@ class HelloCommand extends UserCommand
 
     public function execute(): ServerResponse
     {
+        $this->initConfig();
+        $this->logger->error('Hello command!!!!!!!!!!!!!!!!');
         // Получаем данные сообщения
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
@@ -33,4 +37,10 @@ class HelloCommand extends UserCommand
 
         return $this->replyToChat($text);
     }
+
+    private function initConfig(): void
+    {
+        $this->logger = $this->config['logger'];
+    }
+
 }

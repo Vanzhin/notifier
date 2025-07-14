@@ -37,4 +37,9 @@ final class ChannelRepository extends ServiceEntityRepository implements Channel
     {
         return $this->findOneBy(['secret' => $secret]);
     }
+
+    public function findByChannel(string $channel): ?Channel
+    {
+        return $this->findOneBy(['channel' => $channel]);
+    }
 }

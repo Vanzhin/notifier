@@ -1,0 +1,90 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Notification\Application\Channel\Telegram\Command;
+
+use App\Notification\Domain\Aggregate\PhoneNumber;
+use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Aggregate\ValueObject\EventType;
+use App\Notification\Domain\Repository\ChannelRepositoryInterface;
+use Doctrine\Common\Collections\Collection;
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\Message;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Psr\Log\LoggerInterface;
+
+class GetChannelSubscriptionsCommand extends UserCommand
+{
+    private LoggerInterface $logger;
+    private ChannelRepositoryInterface $channelRepository;
+
+    protected $name = 'get_channel_subscriptions';
+    protected $description = 'Get the channel subscriptions list';
+    protected $usage = '/get_channel_subscriptions';
+    protected $version = '1.0';
+
+    public function execute(): ServerResponse
+    {
+        $this->initDependencies();
+
+        $message = $this->getMessage();
+        $chatId = $message->getChat()->getId();
+        $channel = $this->channelRepository->findByChannel((string)$chatId);
+
+        $responseText = $this->buildGreetingMessage($message);
+
+        if ($channel === null) {
+            return $this->replyToChat($responseText . "❌ *Канал не найден.*");
+        }
+
+        if ($channel->getSubscriptions()->isEmpty()) {
+            return $this->replyToChat($responseText . "ℹ️ *Подписок нет.*");
+        }
+
+        $responseText .= $this->buildSubscriptionsMessage($channel->getSubscriptions());
+
+        return $this->replyToChat($responseText, ['parse_mode' => 'Markdown']);
+    }
+
+    private function initDependencies(): void
+    {
+        $this->logger = $this->config['logger'];
+        $this->channelRepository = $this->config['channelRepository'];
+    }
+
+    private function buildGreetingMessage(Message $message): string
+    {
+        $firstName = $message->getFrom()->getFirstName();
+        return "👋 *Привет, {$firstName}!*\n\n";
+    }
+
+    private function buildSubscriptionsMessage(Collection $subscriptions): string
+    {
+        $message = sprintf("📌 *Подписок в канале: %d*\n\n", $subscriptions->count());
+
+        /** @var Subscription $subscription */
+        foreach ($subscriptions as $subscription) {
+            $message .= $this->formatSubscription($subscription);
+        }
+
+        return $message;
+    }
+
+    private function formatSubscription(Subscription $subscription): string
+    {
+        $numbers = $subscription->phoneNumbers->map(
+            fn(PhoneNumber $phone) => "`{$phone->getPhone()}`"
+        )->toArray();
+
+        $events = $subscription->subscriptionEvents->map(
+            fn(EventType $event) => $event->value
+        )->toArray();
+
+        return sprintf(
+            "📱 *Номера:*\n%s\n📅 *События:*\n`%s`\n\n",
+            implode("\n", $numbers),
+            implode('`, `', $events)
+        );
+    }
+}
