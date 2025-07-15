@@ -20,11 +20,32 @@ framework:
                     multiplier: 2  # Увеличиваем задержку на 2 раза
                     max_delay: 30000  # Максимальная задержка между ретраями
             failed: '%env(MESSENGER_TRANSPORT_DEFAULT_DSN)%'
-
+            external_messages:
+                dsn: '%env(EXTERNAL_MESSAGE_TRANSPORT_DSN)%'
+                serializer: 'messenger.transport.symfony_serializer'
+                retry_strategy:
+                    max_retries: 3
+                    # milliseconds delay
+                    delay: 1000
+                    # causes the delay to be higher before each retry
+                    # e.g. 1 second delay, 2 seconds, 4 seconds
+                    multiplier: 2
+                    max_delay: 30000
+                options:
+                    exchange:
+                        name: '%env(EXTERNAL_MESSAGE_EXCHANGE)%'
+                        type: 'direct'
+                    queues:
+                        phone_numbers:
+                            binding_keys: [ 'phone' ]  # Будет получать только сообщения с routing_key = 'phone'
+                            arguments:
+                                'x-message-ttl': 600000  # 10 минут
+                    auto_setup: true
         routing:
             # Route your messages to the transports
             'App\Notification\Domain\Message\ChannelVerificationCodeGetMessage': async  # Назначаем маршрут для наших сообщений
             'App\Notification\Domain\Message\ChannelVerificationFailedMessage': async
+            'App\Notification\Domain\Message\ExternalMessage': external_messages
 
 
 # when@test:
