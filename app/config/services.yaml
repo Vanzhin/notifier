@@ -49,6 +49,7 @@ services:
         arguments:
             $webhookUrl: '%env(TELEGRAM_NOTIFICATION_BOT_WEBHOOK)%'
             $commandPath: /app/src/Notification/Application/Channel/Telegram/Command
+            $secret: '%env(TELEGRAM_NOTIFICATION_BOT_SECRET)%'
 
     App\Notification\Domain\Service\TelegramChannelVerifier:
         arguments:

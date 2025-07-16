@@ -25,9 +25,13 @@ class WebhookAction extends AbstractController
      */
     public function __invoke(Request $request): Response
     {
-        $this->telegramBotService->handle();
-        $this->notifierLogger->error(json_encode($request->getContent()));
+        $secret = $request->headers->get('x-telegram-bot-api-secret-token');
+        if ($secret) {
+            $this->telegramBotService->handle($secret);
+        }
+        $this->notifierLogger->error(json_encode($request->headers->all(), JSON_THROW_ON_ERROR));
 
         return new Response('ok');
     }
+
 }

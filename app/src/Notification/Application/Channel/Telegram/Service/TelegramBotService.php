@@ -10,7 +10,6 @@ use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Shared\Application\Message\MessageBusInterface;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Telegram;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Psr\Log\LoggerInterface;
 
@@ -19,6 +18,7 @@ final readonly class TelegramBotService
     public function __construct(
         private string $webhookUrl,
         private string $commandPath,
+        private string $secret,
         private Telegram $telegram,
         private LoggerInterface $notifierLogger,
         private MessageBusInterface $messageBus,
@@ -34,7 +34,8 @@ final readonly class TelegramBotService
      */
     public function setWebhook(): ServerResponse
     {
-        return $this->telegram->setWebhook($this->webhookUrl);
+        return $this->telegram->setWebhook($this->webhookUrl,
+            ['secret_token' => $this->secret]);
     }
 
     /**
@@ -62,10 +63,12 @@ final readonly class TelegramBotService
     /**
      * Обработка входящих запросов
      */
-    public function handle(): void
+    public function handle(string $secret): void
     {
         try {
-            $this->telegram->handle();
+            if ($this->isSecretValid($secret)) {
+                $this->telegram->handle();
+            }
         } catch (\Exception $e) {
             $this->notifierLogger->error('Telegram bot handling failed', ['error' => $e->getMessage()]);
             throw $e;
@@ -122,5 +125,10 @@ final readonly class TelegramBotService
 
             $this->telegram->setCommandConfig($command->getName(), $config);
         }
+    }
+
+    private function isSecretValid(string $secret): bool
+    {
+        return $secret === $this->secret;
     }
 }
