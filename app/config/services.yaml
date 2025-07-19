@@ -79,5 +79,10 @@ services:
     App\Shared\Domain\Service\JwtValidatorService:
         arguments:
             $secretKey: '%jwt.secret_key%'
+
+    App\Shared\Domain\Repository\UnitOfWorkInterface:
+        alias: App\Shared\Infrastructure\Persistence\Doctrine\UnitOfWork
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

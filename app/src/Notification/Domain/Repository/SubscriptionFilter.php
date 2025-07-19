@@ -12,9 +12,10 @@ final class SubscriptionFilter
     private array $sort = [];
     private array $phone_numbers = [];
     private array $events = [];
-    private string $owner_id;
+    private ?string $owner_id = null;
 
-    public function __construct(public ?Pager $pager = null,) {
+    public function __construct(public ?Pager $pager = null)
+    {
     }
 
     public function getSort(): array
@@ -32,9 +33,11 @@ final class SubscriptionFilter
         return $this->phone_numbers;
     }
 
-    public function addPhoneNumber( $phone_numbers): void
+    public function addPhoneNumber(string $phone_number): void
     {
-        $this->phone_numbers = $phone_numbers;
+        if (!in_array($phone_number, $this->phone_numbers, true)) {
+            $this->phone_numbers[] = $phone_number;
+        }
     }
 
     public function getEvents(): array
@@ -42,12 +45,14 @@ final class SubscriptionFilter
         return $this->events;
     }
 
-    public function setEvents(array $events): void
+    public function addEvent(string $event): void
     {
-        $this->events = $events;
+        if (!in_array($event, $this->events, true)) {
+            $this->events[] = $event;
+        }
     }
 
-    public function getOwnerId(): string
+    public function getOwnerId(): ?string
     {
         return $this->owner_id;
     }

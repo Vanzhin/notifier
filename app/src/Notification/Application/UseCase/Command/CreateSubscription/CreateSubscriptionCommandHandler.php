@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace App\Notification\Application\UseCase\Command\CreateSubscription;
 
-use App\Notification\Domain\Aggregate\PhoneNumber;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Factory\SubscriptionFactoryInterface;
-use App\Notification\Domain\Repository\PhoneRepositoryInterface;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
+use App\Notification\Domain\Service\PhoneNumberOrganizer;
 use App\Shared\Application\Command\CommandHandlerInterface;
-use Symfony\Component\Uid\Uuid;
 
 readonly class CreateSubscriptionCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private SubscriptionRepositoryInterface $subscriptionRepository,
         private SubscriptionFactoryInterface $subscriptionFactory,
-        private PhoneRepositoryInterface $phoneRepository,
+        private PhoneNumberOrganizer $numberOrganizer,
     ) {
     }
 
     /**
-     * @return string UserId
+     * @throws \Exception
      */
     public function __invoke(CreateSubscriptionCommand $createSubscriptionCommand): string
     {
@@ -33,28 +31,11 @@ readonly class CreateSubscriptionCommandHandler implements CommandHandlerInterfa
         }
 
         foreach ($createSubscriptionCommand->phoneNumbers as $phoneNumber) {
-            $subscription->addPhoneNumber($this->createPhoneIfNotExists($phoneNumber));
+            $subscription->addPhoneNumber($this->numberOrganizer->createPhoneIfNotExists($phoneNumber));
         }
 
         $this->subscriptionRepository->save($subscription);
 
         return $subscription->getId()->toString();
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function createPhoneIfNotExists(string $phone): PhoneNumber
-    {
-        $phone = new PhoneNumber(
-            Uuid::v4(),
-            new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber($phone));
-
-        $exist = $this->phoneRepository->findByPhone($phone->getPhone()->getValue());
-        if ($exist) {
-            $phone = $exist;
-        }
-
-        return $phone;
     }
 }

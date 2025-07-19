@@ -9,11 +9,18 @@ use App\Notification\Domain\Aggregate\Subscription;
 
 class SubscriptionAccessControl
 {
-
     /**
      * Может ли пользователь удалить подписку?
      */
     public function canDeleteSubscription(Subscription $subscription, string $userId): bool
+    {
+        return $subscription->isOwnedBy($userId);
+    }
+
+    /**
+     * Может ли пользователь изменять подписку?
+     */
+    public function canUpdateSubscription(Subscription $subscription, string $userId): bool
     {
         return $subscription->isOwnedBy($userId);
     }

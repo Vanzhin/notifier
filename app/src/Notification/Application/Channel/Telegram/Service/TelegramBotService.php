@@ -9,6 +9,7 @@ use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Shared\Application\Message\MessageBusInterface;
 use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Psr\Log\LoggerInterface;

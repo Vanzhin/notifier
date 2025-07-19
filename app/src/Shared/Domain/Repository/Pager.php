@@ -51,6 +51,11 @@ class Pager
         return $this->per_page;
     }
 
+    public function setPage(int $page): void
+    {
+        $this->page = $page;
+    }
+
     private function setTotalPages(): void
     {
         if (!$this->total_items) {

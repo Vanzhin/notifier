@@ -18,7 +18,7 @@ class PhoneNumberEventScheduler implements ScheduleProviderInterface
     {
         return new Schedule()
             ->add(
-                RecurringMessage::cron('* * * * *',
+                RecurringMessage::cron('*/5 * * * *',
                     new PhoneNumberExternalMessage(
                         '79111111122',
                         $this->getRandomEventType()->value
