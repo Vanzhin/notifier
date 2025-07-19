@@ -48,10 +48,9 @@ readonly class CreateSubscriptionCommandHandler implements CommandHandlerInterfa
     {
         $phone = new PhoneNumber(
             Uuid::v4(),
-            $phone);
+            new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber($phone));
 
-        $exist = $this->phoneRepository->findByPhone($phone->getPhone());
-
+        $exist = $this->phoneRepository->findByPhone($phone->getPhone()->getValue());
         if ($exist) {
             $phone = $exist;
         }

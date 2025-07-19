@@ -6,7 +6,7 @@
         <id name="id" type="uuid">
             <generator strategy="NONE"/>
         </id>
-        <field name="phone" length="17"/>
+        <embedded name="phone" class="App\Notification\Domain\Aggregate\ValueObject\PhoneNumber" use-column-prefix="false"/>
         <many-to-many field="subscriptions" mapped-by="phoneNumbers"
                       target-entity="App\Notification\Domain\Aggregate\Subscription">
         </many-to-many>

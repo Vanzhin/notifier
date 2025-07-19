@@ -8,13 +8,10 @@ use App\Shared\Domain\Aggregate\Aggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
+use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber as Phone;
 
 class PhoneNumber extends Aggregate implements \Stringable
 {
-    private const string MN_PREFIX = '810';
-
-    private readonly string $phone;
-
     /**
      * @var Collection<Subscription>
      */
@@ -25,10 +22,8 @@ class PhoneNumber extends Aggregate implements \Stringable
      */
     public function __construct(
         private Uuid $id,
-        string $value
+        private readonly Phone $phone,
     ) {
-        $this->assertValidName($value);
-        $this->setPhone($value);
         $this->subscriptions = new ArrayCollection();
     }
 
@@ -37,7 +32,7 @@ class PhoneNumber extends Aggregate implements \Stringable
         return $this->id;
     }
 
-    public function getPhone(): string
+    public function getPhone(): Phone
     {
         return $this->phone;
     }
@@ -49,7 +44,7 @@ class PhoneNumber extends Aggregate implements \Stringable
 
     public function __toString(): string
     {
-        return $this->phone;
+        return $this->phone->__toString();
     }
 
     public function addSubscription(Subscription $subscription): void
@@ -62,25 +57,5 @@ class PhoneNumber extends Aggregate implements \Stringable
     public function removeSubscription(Subscription $subscription): void
     {
         $this->subscriptions->removeElement($subscription);
-    }
-
-    private function assertValidName(string $value): void
-    {
-        if (!preg_match('/^\d{11,17}$/', $value)) {
-            throw new \Exception('Incorrect phone number');
-        }
-    }
-
-    private function setPhone(string $value): void
-    {
-        // Для RU номеров заменим первую цифру на 7
-        if (strlen($value) === 11 && str_starts_with($value, '8')) {
-            $value = preg_replace('/^8/', '7', $value);;
-        }
-        if (strlen($value) > 11) {
-            $value = self::MN_PREFIX . $value;
-        }
-
-        $this->phone = $value;
     }
 }

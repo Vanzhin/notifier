@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Notification\Infrastructure\Repository;
 
 use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
+use App\Shared\Domain\Repository\PaginationResult;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -31,5 +33,10 @@ final class SubscriptionRepository extends ServiceEntityRepository implements Su
     {
         $this->getEntityManager()->remove($subscription);
         $this->getEntityManager()->flush();
+    }
+
+    public function findByFilter(SubscriptionFilter $filter): PaginationResult
+    {
+        // TODO: Implement findByFilter() method.
     }
 }

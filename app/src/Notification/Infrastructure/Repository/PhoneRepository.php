@@ -18,6 +18,6 @@ final class PhoneRepository extends ServiceEntityRepository implements PhoneRepo
 
     public function findByPhone(string $phone): ?PhoneNumber
     {
-        return $this->findOneBy(['phone' => $phone]);
+        return $this->findOneBy(['phone.value' => $phone]);
     }
 }

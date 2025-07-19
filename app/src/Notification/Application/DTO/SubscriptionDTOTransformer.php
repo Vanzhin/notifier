@@ -20,7 +20,7 @@ readonly class SubscriptionDTOTransformer
         }
         $phoneNumbers = [];
         foreach ($entity->phoneNumbers as $phone) {
-            $phoneNumbers[] = $phone->getPhone();
+            $phoneNumbers[] = $phone->getPhone()->getValue();
         }
 
         $dto = new SubscriptionDTO(
