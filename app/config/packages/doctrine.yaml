@@ -23,11 +23,11 @@ doctrine:
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
     orm:
-        auto_generate_proxy_classes: true
-        enable_lazy_ghost_objects: true
+#        auto_generate_proxy_classes: true
+#        enable_lazy_ghost_objects: true
         default_entity_manager: default
-        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
-        proxy_namespace: Proxies
+#        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+#        proxy_namespace: Proxies
         entity_managers:
             default:
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

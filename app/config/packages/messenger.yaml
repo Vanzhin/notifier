@@ -45,7 +45,7 @@ framework:
             # Route your messages to the transports
             'App\Notification\Domain\Message\ChannelVerificationCodeGetMessage': async  # Назначаем маршрут для наших сообщений
             'App\Notification\Domain\Message\ChannelVerificationFailedMessage': async
-            'App\Notification\Domain\Message\ExternalMessage': external_messages
+            'App\Notification\Domain\Message\PhoneNumberExternalMessage': external_messages
 
 
 # when@test:

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Notification\Infrastructure\MessageHandler;
 
-use App\Notification\Domain\Message\ExternalMessage;
+use App\Notification\Domain\Message\PhoneNumberExternalMessage;
 use App\Shared\Application\Message\MessageHandlerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 readonly class ExternalMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
@@ -15,10 +17,10 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
     ) {
     }
 
-    public function __invoke(ExternalMessage $message): void
+    public function __invoke(PhoneNumberExternalMessage $message): void
     {
         try {
-            $this->notifierLogger->error(json_encode($message->getData()));
+            $this->notifierLogger->error(json_encode($message->jsonSerialize()));
         } catch (\Exception $exception) {
             $this->notifierLogger->error($exception->getMessage());
         }

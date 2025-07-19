@@ -18,11 +18,7 @@ class PhoneNumber extends Aggregate implements \Stringable
     /**
      * @var Collection<Subscription>
      */
-    private Collection $subscriptions {
-        get {
-            return $this->subscriptions;
-        }
-    }
+    private Collection $subscriptions;
 
     /**
      * @throws \Exception
@@ -44,6 +40,11 @@ class PhoneNumber extends Aggregate implements \Stringable
     public function getPhone(): string
     {
         return $this->phone;
+    }
+
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
     }
 
     public function __toString(): string
