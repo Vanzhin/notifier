@@ -6,18 +6,22 @@ namespace App\Notification\Domain\Service;
 
 use App\Notification\Application\Channel\Telegram\Service\TelegramBotService;
 use App\Notification\Domain\Aggregate\Channel;
+use App\Notification\Domain\Message\Notification\NotificationMessage;
 
 final readonly class TelegramMessageSender implements MessageSenderInterface
 {
-    public function __construct(private TelegramBotService $telegramBotService)
-    {
+    public function __construct(
+        private TelegramBotService $telegramBotService,
+        private NotificationMessageFormatterInterface $telegramMessageFormatter
+    ) {
     }
 
     /**
      * @throws \Exception
      */
-    public function send(Channel $channel, string $message): void
+    public function send(Channel $channel, NotificationMessage $message): void
     {
-        $this->telegramBotService->sendMessage((int)$channel->getChannel(), $message);
+        $text = $this->telegramMessageFormatter->format($message);
+        $this->telegramBotService->sendMessage((int)$channel->getChannel(), $text);
     }
 }

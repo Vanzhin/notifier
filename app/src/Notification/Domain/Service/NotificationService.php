@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notification\Domain\Service;
 
 use App\Notification\Domain\Aggregate\Channel;
+use App\Notification\Domain\Message\Notification\NotificationMessage;
 
 final readonly class NotificationService
 {
@@ -12,7 +13,7 @@ final readonly class NotificationService
     {
     }
 
-    public function sendMessage(Channel $channel, string $message): void
+    public function sendMessage(Channel $channel, NotificationMessage $message): void
     {
         if (!$channel->isVerified()) {
             throw new \RuntimeException('Channel is not verified');

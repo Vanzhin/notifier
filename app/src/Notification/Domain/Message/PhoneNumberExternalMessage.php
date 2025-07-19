@@ -8,8 +8,11 @@ use App\Shared\Domain\Message\MessageInterface;
 
 readonly class PhoneNumberExternalMessage implements MessageInterface, \JsonSerializable
 {
-    public function __construct(private string $phone_number, private string $event_type)
-    {
+    public function __construct(
+        private string $phone_number,
+        private string $event_type,
+        private array $extra = []
+    ) {
     }
 
     public function getPhoneNumber(): string
@@ -20,6 +23,11 @@ readonly class PhoneNumberExternalMessage implements MessageInterface, \JsonSeri
     public function getEventType(): string
     {
         return $this->event_type;
+    }
+
+    public function getExtra(): array
+    {
+        return $this->extra;
     }
 
     public function jsonSerialize(): array

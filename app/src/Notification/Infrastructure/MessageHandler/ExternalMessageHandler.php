@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notification\Infrastructure\MessageHandler;
 
 use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Message\Notification\NotificationMessage;
 use App\Notification\Domain\Message\PhoneNumberExternalMessage;
 use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
@@ -19,45 +20,43 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 readonly class ExternalMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
-        private LoggerInterface $notifierLogger,
         private SubscriptionRepositoryInterface $subscriptionRepository,
         private UnitOfWorkInterface $unitOfWork,
         private NotificationService $notificationService,
+        private LoggerInterface $notifierLogger
     ) {
     }
 
     public function __invoke(PhoneNumberExternalMessage $message): void
     {
-        try {
-            $filter = new SubscriptionFilter(new Pager(1, 100));
-            $filter->addEvent($message->getEventType());
-            $filter->addPhoneNumber($message->getPhoneNumber());
+        $filter = new SubscriptionFilter(new Pager(1, 100));
+        $filter->addEvent($message->getEventType());
+        $filter->addPhoneNumber($message->getPhoneNumber());
 
-            do {
-                $result = $this->subscriptionRepository->findByFilter($filter);
-                $subscriptions = $result->items;
+        do {
+            $result = $this->subscriptionRepository->findByFilter($filter);
+            $subscriptions = $result->items;
 
-                if (empty($subscriptions)) {
-                    break;
+            if (empty($subscriptions)) {
+                break;
+            }
+
+            /** @var Subscription $subscription */
+            foreach ($subscriptions as $subscription) {
+                foreach ($subscription->channels as $channel) {
+                    $this->notificationService->sendMessage($channel,
+                        new NotificationMessage(
+                            $message->getPhoneNumber(),
+                            $message->getEventType(),
+                            $message->getExtra()
+                        )
+                    );
                 }
+            }
 
-                /** @var Subscription $subscription */
-                foreach ($subscriptions as $subscription) {
-                    foreach ($subscription->channels as $channel) {
-                        //todo передавать не стрингу а объект, формировать красиво в сендере
-                        $this->notificationService->sendMessage($channel,
-                            $message->getPhoneNumber() . '->' . $message->getEventType());
-                    }
-                }
-
-                $filter->pager->page = $filter->pager->page + 1;
-                $this->unitOfWork->clear();
-            } while (true);
-
-            $this->notifierLogger->error(json_encode($message->jsonSerialize()));
-        } catch (\Exception $exception) {
-            $this->notifierLogger->error($exception->getMessage());
-        }
+            $filter->pager->page = $filter->pager->page + 1;
+            $this->unitOfWork->clear();
+        } while (true);
     }
 
 }
