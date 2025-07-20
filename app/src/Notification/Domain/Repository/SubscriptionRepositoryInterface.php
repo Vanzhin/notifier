@@ -15,7 +15,6 @@ interface SubscriptionRepositoryInterface
 
     public function findByFilter(SubscriptionFilter $filter): PaginationResult;
 
-
     public function remove(Subscription $subscription): void;
 
 }

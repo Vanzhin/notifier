@@ -58,13 +58,11 @@ final class SubscriptionRepository extends ServiceEntityRepository implements Su
             $qb->andWhere($orX);
         }
 
-
         if ($filter->getOwnerId()) {
-            $qb->andWhere('s.ownerId = :ownerId')
+            $qb->andWhere('s.subscriberId = :ownerId')
                 ->setParameter('ownerId', $filter->getOwnerId());
         }
 
-        //todo sort
         if ($filter->getSort()) {
             foreach ($filter->getSort() as $field => $direction) {
                 $qb->addOrderBy("s.$field", $direction);
@@ -72,6 +70,7 @@ final class SubscriptionRepository extends ServiceEntityRepository implements Su
         } else {
             $qb->addOrderBy('s.createdAt', 'DESC'); // Сортировка по умолчанию
         }
+
         if ($filter->pager) {
             $qb->setMaxResults($filter->pager->getLimit());
             $qb->setFirstResult($filter->pager->getOffset());
