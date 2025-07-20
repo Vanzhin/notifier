@@ -15,7 +15,7 @@ readonly class SubscriptionDTOTransformer
     public function fromEntity(Subscription $entity, bool $withChannels = true): SubscriptionDTO
     {
         $events = [];
-        foreach ($entity->subscriptionEvents as $event) {
+        foreach ($entity->getSubscriptionEvents() as $event) {
             $events[] = $event->value;
         }
         $phoneNumbers = [];

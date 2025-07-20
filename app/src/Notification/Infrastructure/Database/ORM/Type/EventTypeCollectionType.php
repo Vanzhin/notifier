@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Notification\Infrastructure\Database\ORM\Type;
 
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -15,17 +14,17 @@ class EventTypeCollectionType extends Type
     {
         return json_encode(array_map(
             fn(EventType $eventType) => $eventType->value,
-            $value->toArray()
+            $value
         ));
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ArrayCollection
+    public function convertToPHPValue($value, AbstractPlatform $platform): array
     {
         $data = json_decode($value, true);
-        return new ArrayCollection(array_map(
+        return array_map(
             fn(string $type) => EventType::from($type),
             $data ?? []
-        ));
+        );
     }
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string

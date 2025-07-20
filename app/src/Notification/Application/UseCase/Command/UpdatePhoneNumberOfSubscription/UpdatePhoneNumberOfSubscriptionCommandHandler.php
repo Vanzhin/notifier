@@ -23,7 +23,7 @@ readonly class UpdatePhoneNumberOfSubscriptionCommandHandler implements CommandH
     /**
      * @throws \Exception
      */
-    public function __invoke(UpdatedPhoneNumberOfSubscriptionCommand $command): void
+    public function __invoke(UpdatePhoneNumberOfSubscriptionCommand $command): void
     {
         $subscription = $this->subscriptionRepository->findById($command->subscriptionId);
         Assert::notNull($subscription, 'Subscription not found');

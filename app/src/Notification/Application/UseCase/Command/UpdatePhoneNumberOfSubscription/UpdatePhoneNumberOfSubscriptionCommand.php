@@ -6,7 +6,7 @@ namespace App\Notification\Application\UseCase\Command\UpdatePhoneNumberOfSubscr
 
 use App\Shared\Application\Command\CommandInterface;
 
-final readonly class UpdatedPhoneNumberOfSubscriptionCommand implements CommandInterface
+final readonly class UpdatePhoneNumberOfSubscriptionCommand implements CommandInterface
 {
     public array $phoneNumbers;
 

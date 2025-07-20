@@ -16,13 +16,9 @@ use Symfony\Component\Uid\Uuid;
 class Subscription extends Aggregate
 {
     /**
-     * @var Collection<EventType>
+     * @var array<EventType>
      */
-    public Collection $subscriptionEvents {
-        get {
-            return $this->subscriptionEvents;
-        }
-    }
+    private array $subscriptionEvents = [];
     /**
      * @var Collection<Channel>
      */
@@ -47,7 +43,6 @@ class Subscription extends Aggregate
         private readonly Uuid $id,
         private readonly string $subscriberId,
     ) {
-        $this->subscriptionEvents = new ArrayCollection();
         $this->channels = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
@@ -66,14 +61,17 @@ class Subscription extends Aggregate
 
     public function addEvent(EventType $eventType): void
     {
-        if (!$this->subscriptionEvents->contains($eventType)) {
-            $this->subscriptionEvents->add($eventType);
+        if (!in_array($eventType, $this->subscriptionEvents)) {
+            $this->subscriptionEvents[] = $eventType;
         }
     }
 
     public function removeEvent(EventType $eventType): void
     {
-        $this->subscriptionEvents->removeElement($eventType);
+        $this->subscriptionEvents = array_filter(
+            $this->subscriptionEvents,
+            fn(EventType $event) => $event !== $eventType
+        );
     }
 
     /**
@@ -140,5 +138,18 @@ class Subscription extends Aggregate
     public function isOwnedBy(string $userId): bool
     {
         return $this->subscriberId === $userId;
+    }
+
+    public function getSubscriptionEvents(): array
+    {
+        return $this->subscriptionEvents;
+    }
+
+    public function setSubscriptionEvents(EventType ...$events): void
+    {
+        $this->subscriptionEvents = [];
+        foreach ($events as $event) {
+            $this->addEvent($event);
+        }
     }
 }

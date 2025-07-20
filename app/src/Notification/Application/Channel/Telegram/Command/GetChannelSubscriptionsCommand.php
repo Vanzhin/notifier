@@ -77,12 +77,10 @@ class GetChannelSubscriptionsCommand extends UserCommand
             fn(PhoneNumber $phone) => "`{$phone->getPhone()}`"
         )->toArray();
 
-        $events = $subscription->subscriptionEvents->map(
-            fn(EventType $event) => $event->value
-        )->toArray();
+        $events = array_map(fn(EventType $event) => $event->value, $subscription->getSubscriptionEvents());
 
         return sprintf(
-            "📱 *Номера:*\n%s\n📅 *События:*\n`%s`\n\n",
+            "📱 *Номера:*\n%s\n📌 *События:*\n`%s`\n\n",
             implode("\n", $numbers),
             implode('`, `', $events)
         );

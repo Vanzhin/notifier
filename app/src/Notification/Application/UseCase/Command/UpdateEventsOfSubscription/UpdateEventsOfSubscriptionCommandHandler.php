@@ -22,7 +22,7 @@ readonly class UpdateEventsOfSubscriptionCommandHandler implements CommandHandle
     /**
      * @throws \Exception
      */
-    public function __invoke(UpdatedEventsOfSubscriptionCommand $command): void
+    public function __invoke(UpdateEventsOfSubscriptionCommand $command): void
     {
         $subscription = $this->subscriptionRepository->findById($command->subscriptionId);
         Assert::notNull($subscription, 'Subscription not found');
@@ -30,8 +30,7 @@ readonly class UpdateEventsOfSubscriptionCommandHandler implements CommandHandle
         if (!$this->subscriptionAccessControl->canUpdateSubscription($subscription, $command->ownerId)) {
             throw new AppException('You are not allowed to do this action.', 403);
         };
-
-        $subscription->subscriptionEvents->clear();
+        $subscription->setSubscriptionEvents();
         foreach ($command->events as $event) {
             $subscription->addEvent(EventType::from($event));
         }

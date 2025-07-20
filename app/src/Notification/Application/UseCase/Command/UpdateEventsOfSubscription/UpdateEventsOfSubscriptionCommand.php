@@ -6,7 +6,7 @@ namespace App\Notification\Application\UseCase\Command\UpdateEventsOfSubscriptio
 
 use App\Shared\Application\Command\CommandInterface;
 
-final readonly class UpdatedEventsOfSubscriptionCommand implements CommandInterface
+final readonly class UpdateEventsOfSubscriptionCommand implements CommandInterface
 {
     public array $events;
 
