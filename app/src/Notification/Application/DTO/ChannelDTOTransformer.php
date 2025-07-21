@@ -9,6 +9,12 @@ use Doctrine\Common\Collections\Collection;
 
 readonly class ChannelDTOTransformer
 {
+    private SubscriptionDTOTransformer $subscriptionDTOTransformer;
+
+    public function __construct()
+    {
+        $this->subscriptionDTOTransformer = new SubscriptionDTOTransformer($this);
+    }
 
     public function fromEntity(Channel $entity, array $with = []): ChannelDTO
     {
@@ -41,11 +47,10 @@ readonly class ChannelDTOTransformer
 
     private function addSubscriptions(ChannelDTO $channelDTO, Collection $subscriptions): void
     {
-        $subscriptionDTOTransformer = new SubscriptionDTOTransformer($this);
-        $subscriptionDTOs = [];
-        foreach ($subscriptions as $subscription) {
-            $subscriptionDTOs[] = $subscriptionDTOTransformer->fromEntity($subscription, withChannels: false);
-        }
-        $channelDTO->subscriptions = $subscriptionDTOs;
+        $channelDTO->subscriptions = $subscriptions->isEmpty()
+            ? []
+            : $subscriptions->map(
+                fn($subscription) => $this->subscriptionDTOTransformer->fromEntity($subscription, false)
+            )->toArray();
     }
 }

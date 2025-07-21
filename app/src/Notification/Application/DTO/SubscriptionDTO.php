@@ -6,15 +6,15 @@ namespace App\Notification\Application\DTO;
 
 class SubscriptionDTO
 {
-    public ?array $channels;
+    public ?array $channels = null;
 
     public function __construct(
-        public ?string $id,
-        public ?string $subscriber_id,
-        public ?array $phone_numbers,
-        public ?array $events,
-        public ?bool $is_active,
-        public ?\DateTimeImmutable $created_at,
+        public ?string $id = null,
+        public ?string $subscriber_id = null,
+        public ?array $phone_numbers = null,
+        public ?array $events = null,
+        public ?bool $is_active = null,
+        public ?\DateTimeImmutable $created_at = null,
 
     ) {
     }
