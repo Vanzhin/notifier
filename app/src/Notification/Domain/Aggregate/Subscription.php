@@ -108,7 +108,7 @@ class Subscription extends Aggregate
 
     public function removePhoneNumber(PhoneNumber $phoneNumber): void
     {
-        $this->channels->removeElement($phoneNumber);
+        $this->phoneNumbers->removeElement($phoneNumber);
     }
 
     public function isActive(): bool
@@ -117,12 +117,12 @@ class Subscription extends Aggregate
             return false;
         }
 
-        return !empty($this->channels);
+        return !$this->channels->isEmpty();
     }
 
     public function getChannelVerificationData(ChannelType $channelType): ?array
     {
-        return $this->channels->findFirst(function (Channel $item) use ($channelType) {
+        return $this->channels->findFirst(function (int $key, Channel $item) use ($channelType) {
             if ($item->getType() === $channelType) {
                 return $item->getVerificationData();
             }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Notification\Domain\Aggregate\ValueObject;
 
+use App\Shared\Infrastructure\Exception\AppException;
+
 class PhoneNumber implements \Stringable
 {
     private const string MN_PREFIX = '810';
@@ -24,10 +26,13 @@ class PhoneNumber implements \Stringable
         return $this->value;
     }
 
+    /**
+     * @throws AppException
+     */
     private function assertValidName(string $value): void
     {
         if (!preg_match('/^\d{11,17}$/', $value)) {
-            throw new \Exception('Incorrect phone number');
+            throw new AppException('Incorrect phone number');
         }
     }
 
