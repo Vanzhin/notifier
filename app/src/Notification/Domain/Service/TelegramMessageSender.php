@@ -8,7 +8,7 @@ use App\Notification\Application\Channel\Telegram\Service\TelegramBotService;
 use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Message\Notification\NotificationMessage;
 
-final readonly class TelegramMessageSender implements MessageSenderInterface
+readonly class TelegramMessageSender implements MessageSenderInterface
 {
     public function __construct(
         private TelegramBotService $telegramBotService,

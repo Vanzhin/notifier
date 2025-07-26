@@ -7,7 +7,7 @@ namespace App\Notification\Domain\Service;
 use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Message\Notification\NotificationMessage;
 
-final class EmailMessageSender implements MessageSenderInterface
+class EmailMessageSender implements MessageSenderInterface
 {
 
     public function send(Channel $channel, NotificationMessage $message): void
