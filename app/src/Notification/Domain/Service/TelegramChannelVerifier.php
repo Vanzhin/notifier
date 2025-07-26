@@ -19,6 +19,9 @@ final readonly class TelegramChannelVerifier implements ChannelVerifierInterface
     ) {
     }
 
+    /**
+     * @throws AppException
+     */
     public function initiateChannelVerification(Channel $channel): string
     {
         $secret = $this->tokenService->generate(32);
