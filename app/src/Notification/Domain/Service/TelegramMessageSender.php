@@ -11,7 +11,7 @@ use App\Notification\Domain\Message\Notification\NotificationMessage;
 readonly class TelegramMessageSender implements MessageSenderInterface
 {
     public function __construct(
-        private TelegramBotService $telegramBotService,
+        private TelegramBotServiceInterface $telegramBotService,
         private NotificationMessageFormatterInterface $telegramMessageFormatter,
     ) {
     }
@@ -22,6 +22,6 @@ readonly class TelegramMessageSender implements MessageSenderInterface
     public function send(Channel $channel, NotificationMessage $message): void
     {
         $text = $this->telegramMessageFormatter->format($message);
-        $this->telegramBotService->sendMessage((int) $channel->getChannel(), $text);
+        $this->telegramBotService->sendMessage((int)$channel->getChannel(), $text);
     }
 }

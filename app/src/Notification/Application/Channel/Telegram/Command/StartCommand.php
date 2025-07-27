@@ -8,7 +8,6 @@ use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Message\ChannelVerificationCodeGetMessage;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Shared\Application\Message\MessageBusInterface;
-use App\Shared\Infrastructure\Exception\AppException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -27,7 +26,6 @@ class StartCommand extends UserCommand
     protected $version = '1.0';
 
     /**
-     * @throws AppException
      * @throws TelegramException
      */
     public function execute(): ServerResponse
@@ -71,9 +69,6 @@ class StartCommand extends UserCommand
         return $this->channelRepository->findBySecret($code);
     }
 
-    /**
-     * @throws AppException
-     */
     private function addChannelToChannel(Channel $channel, string $chan): void
     {
         $channel->setChannel($chan);

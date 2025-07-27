@@ -1,0 +1,17 @@
+deptrac:
+    paths:
+        - ./src
+    layers:
+        -   name: Shared
+            collectors:
+                -   type: directory
+                    value: ./src/Shared/.*
+        -   name: Notification
+            collectors:
+                -   type: directory
+                    value: ./src/Notification/.*
+
+    ruleset:
+        Notification:
+            - Shared
+        Shared: ~

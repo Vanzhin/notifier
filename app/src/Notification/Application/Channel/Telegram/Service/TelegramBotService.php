@@ -7,6 +7,8 @@ namespace App\Notification\Application\Channel\Telegram\Service;
 use App\Notification\Domain\Aggregate\ChannelInterface;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
+use App\Notification\Domain\Service\EventTypeResolver;
+use App\Notification\Domain\Service\TelegramBotServiceInterface;
 use App\Shared\Application\Message\MessageBusInterface;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -14,7 +16,7 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Psr\Log\LoggerInterface;
 
-final readonly class TelegramBotService
+final readonly class TelegramBotService implements TelegramBotServiceInterface
 {
     public function __construct(
         private string $webhookUrl,
@@ -24,6 +26,7 @@ final readonly class TelegramBotService
         private LoggerInterface $notifierLogger,
         private MessageBusInterface $messageBus,
         private ChannelRepositoryInterface $channelRepository,
+        private EventTypeResolver $eventTypeResolver
     ) {
         $this->addCommandsPath();
         $this->configureCommands();
@@ -103,6 +106,7 @@ final readonly class TelegramBotService
         // Общие зависимости для всех команд
         $commonConfig = [
             'logger' => $this->notifierLogger,
+            'eventTypeResolver' => $this->eventTypeResolver,
         ];
 
         // Специфические зависимости для отдельных команд

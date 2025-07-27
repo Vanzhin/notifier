@@ -8,6 +8,7 @@ use App\Notification\Domain\Aggregate\PhoneNumber;
 use App\Notification\Domain\Aggregate\Subscription;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
+use App\Notification\Domain\Service\EventTypeResolver;
 use Doctrine\Common\Collections\Collection;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\Message;
@@ -18,6 +19,7 @@ class GetChannelSubscriptionsCommand extends UserCommand
 {
     private LoggerInterface $logger;
     private ChannelRepositoryInterface $channelRepository;
+    private EventTypeResolver $eventTypeResolver;
 
     protected $name = 'get_channel_subscriptions';
     protected $description = 'Get the channel subscriptions list';
@@ -30,16 +32,16 @@ class GetChannelSubscriptionsCommand extends UserCommand
 
         $message = $this->getMessage();
         $chatId = $message->getChat()->getId();
-        $channel = $this->channelRepository->findByChannel((string) $chatId);
+        $channel = $this->channelRepository->findByChannel((string)$chatId);
 
         $responseText = $this->buildGreetingMessage($message);
 
         if (null === $channel) {
-            return $this->replyToChat($responseText.'❌ *Канал не найден.*');
+            return $this->replyToChat($responseText . '❌ *Канал не найден.*');
         }
 
         if ($channel->getSubscriptions()->isEmpty()) {
-            return $this->replyToChat($responseText.'ℹ️ *Подписок нет.*');
+            return $this->replyToChat($responseText . 'ℹ️ *Подписок нет.*');
         }
 
         $responseText .= $this->buildSubscriptionsMessage($channel->getSubscriptions());
@@ -51,6 +53,7 @@ class GetChannelSubscriptionsCommand extends UserCommand
     {
         $this->logger = $this->config['logger'];
         $this->channelRepository = $this->config['channelRepository'];
+        $this->eventTypeResolver = $this->config['eventTypeResolver'];
     }
 
     private function buildGreetingMessage(Message $message): string
@@ -75,10 +78,12 @@ class GetChannelSubscriptionsCommand extends UserCommand
     private function formatSubscription(Subscription $subscription): string
     {
         $numbers = $subscription->phoneNumbers->map(
-            fn (PhoneNumber $phone) => "`{$phone->getPhone()}`"
+            fn(PhoneNumber $phone) => "`{$phone->getPhone()}`"
         )->toArray();
 
-        $events = array_map(fn (EventType $event) => $event->value, $subscription->getSubscriptionEvents());
+        $events = array_map(function (EventType $event) {
+            return $this->eventTypeResolver->resolve($event);
+        }, $subscription->getSubscriptionEvents());
 
         return sprintf(
             "📱 *Номера:*\n%s\n📌 *События:*\n`%s`\n\n",
