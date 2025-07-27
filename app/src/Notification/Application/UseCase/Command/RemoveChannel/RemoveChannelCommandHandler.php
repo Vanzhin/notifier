@@ -14,8 +14,8 @@ readonly class RemoveChannelCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ChannelRepositoryInterface $repository,
-    private ChannelAccessControl $channelAccessControl)
-    {
+        private ChannelAccessControl $channelAccessControl
+    ) {
     }
 
     public function __invoke(RemoveChannelCommand $command): void
@@ -28,7 +28,6 @@ readonly class RemoveChannelCommandHandler implements CommandHandlerInterface
         if (!$this->channelAccessControl->canViewChannel($channel, $command->ownerId)) {
             throw new AppException('Channel is not allowed to view.', 403);
         }
-
 
         $this->repository->remove($channel);
     }

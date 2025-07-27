@@ -12,9 +12,8 @@ use Symfony\Component\Uid\Uuid;
 
 readonly class CreateChannelCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(
-        private ChannelRepositoryInterface $channelRepository,
-    ) {
+    public function __construct(private ChannelRepositoryInterface $channelRepository)
+    {
     }
 
     /**
