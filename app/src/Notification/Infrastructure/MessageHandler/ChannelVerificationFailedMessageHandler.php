@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Notification\Infrastructure\MessageHandler;
 
+use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Message\ChannelVerificationFailedMessage;
+use App\Notification\Domain\Message\Notification\NotificationMessage;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Notification\Domain\Service\NotificationService;
 use App\Shared\Application\Message\MessageHandlerInterface;
@@ -22,7 +24,14 @@ readonly class ChannelVerificationFailedMessageHandler implements MessageHandler
         if ($message->channelId !== null) {
             $channel = $this->channelRepository->findById($message->channelId);
             if ($channel) {
-                $this->notificationService->sendMessage($channel, $message->reason);
+                $this->notificationService->sendMessage($channel,
+                    new NotificationMessage(
+                        'Channel verification failed',
+                        EventType::CHANNEL_VERIFICATION,
+                        null,
+                        [$message->reason]
+                    )
+                );
             }
         }
     }

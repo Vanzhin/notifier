@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Notification\Infrastructure\MessageHandler;
 
 use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Message\Notification\NotificationMessage;
 use App\Notification\Domain\Message\PhoneNumberExternalMessage;
 use App\Notification\Domain\Repository\SubscriptionFilter;
@@ -46,8 +47,9 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
                 foreach ($subscription->channels as $channel) {
                     $this->notificationService->sendMessage($channel,
                         new NotificationMessage(
+                            'New phone number event',
+                            EventType::from($message->getEventType()),
                             $message->getPhoneNumber(),
-                            $message->getEventType(),
                             $message->getExtra()
                         )
                     );
