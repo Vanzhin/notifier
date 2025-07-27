@@ -19,4 +19,8 @@ enum EventType: string
     //Появился в сети
     case AVAILABLE = 'available';
 
+    //верификация канала
+    case CHANNEL_VERIFICATION = 'channel_verification';
+
+
 }

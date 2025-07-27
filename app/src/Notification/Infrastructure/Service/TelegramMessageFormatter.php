@@ -17,12 +17,16 @@ final readonly class TelegramMessageFormatter implements NotificationMessageForm
 
     public function format(NotificationMessage $message): string
     {
-        return sprintf(
-            "🔔 Уведомление\n\n📞 Номер: %s\n🎯 Событие: %s\n📌 Дополнительно: %s\n",
-            $message->phone_number,
-            $this->eventTypeResolver->resolve(EventType::from($message->event_type)),
-            implode(', ', $message->extra)
-        );
+        return match ($message->event_type) {
+            EventType::CHANNEL_VERIFICATION => sprintf(
+                "🔔 Уведомление\n\n🎯 Событие: %s\n📌 Дополнительно: %s\n",
+                $message->message,
+                implode(', ', $message->extra)),
+            default => sprintf(
+                "🔔 Уведомление\n\n📞 Номер: %s\n🎯 Событие: %s\n📌 Дополнительно: %s\n",
+                $message->phone_number,
+                $this->eventTypeResolver->resolve($message->event_type),
+                implode(', ', $message->extra))
+        };
     }
-
 }

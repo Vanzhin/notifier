@@ -13,7 +13,8 @@ final readonly class EventTypeResolver
         return match ($eventType) {
             EventType::AVAILABLE => 'Доступен',
             EventType::MISSED_CALL => 'Пропущенный вызов',
-            EventType::UNAVAILABLE => 'Не доступен'
+            EventType::UNAVAILABLE => 'Не доступен',
+            EventType::CHANNEL_VERIFICATION => 'Верификация канала'
         };
     }
 }

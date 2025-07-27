@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class HelloCommand extends UserCommand
 {
-    private LoggerInterface $logger;
     protected $name = 'hello';
     protected $description = 'Hello command';
     protected $usage = '/hello';
@@ -19,28 +18,18 @@ class HelloCommand extends UserCommand
     public function execute(): ServerResponse
     {
         $this->initConfig();
-        $this->logger->error('Hello command!!!!!!!!!!!!!!!!');
         // Получаем данные сообщения
         $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user_id = $message->getFrom()->getId();
         $first_name = $message->getFrom()->getFirstName();
 
         // Основное приветственное сообщение
         $text = "👋 Привет, {$first_name}!\n\n";
-        $text .= "Я бот для управления уведомлениями. это хеллоу!!!!!!!\n";
+        $text .= "Я бот для управления уведомлениями.\n";
         $text .= "Вот что я могу:\n\n";
-        $text .= "🔹 /subscribe - Подписаться на уведомления\n";
-        $text .= "🔹 /unsubscribe - Отписаться от уведомлений\n";
-        $text .= "🔹 /settings - Настройки уведомлений\n";
-        $text .= "🔹 /help - Помощь по командам";
+        $text .= "🔹 /hello - Приветствие\n";
+        $text .= "🔹 /get_channel_subscriptions - Посмотреть подписки канала\n";
+//        $text .= "🔹 /unsubscribe - Отписаться от уведомлений\n";
 
         return $this->replyToChat($text);
     }
-
-    private function initConfig(): void
-    {
-        $this->logger = $this->config['logger'];
-    }
-
 }
