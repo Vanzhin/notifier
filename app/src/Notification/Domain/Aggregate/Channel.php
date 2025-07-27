@@ -10,7 +10,6 @@ use App\Shared\Domain\Aggregate\Aggregate;
 use App\Shared\Infrastructure\Exception\AppException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SensitiveParameter;
 use Symfony\Component\Uid\Uuid;
 
 class Channel extends Aggregate implements ChannelInterface
@@ -39,7 +38,7 @@ class Channel extends Aggregate implements ChannelInterface
         if ($this->secret !== $verificationValue) {
             return false;
         }
-        if ($this->channel === null) {
+        if (null === $this->channel) {
             return false;
         }
         $this->isVerified = true;
@@ -68,7 +67,7 @@ class Channel extends Aggregate implements ChannelInterface
         return $this->data;
     }
 
-    public function setSecret(#[SensitiveParameter] string $secret): void
+    public function setSecret(#[\SensitiveParameter] string $secret): void
     {
         if ($this->isVerified) {
             throw new AppException('Нельзя установить секрет для верифицированного канала.');
@@ -135,5 +134,4 @@ class Channel extends Aggregate implements ChannelInterface
             default => false,
         };
     }
-
 }

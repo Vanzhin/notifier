@@ -106,7 +106,7 @@ class FindChannelQueryHandlerTest extends TestCase
             data: [],
             type: 'telegram',
             is_verified: true
-        );;
+        );
 
         $this->channelRepository->expects($this->once())
             ->method('findById')

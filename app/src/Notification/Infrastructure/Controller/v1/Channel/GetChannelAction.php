@@ -18,7 +18,7 @@ class GetChannelAction extends JwtCheckController
 {
     public function __construct(
         private readonly QueryBusInterface $queryBus,
-        JwtValidatorService $jwtValidatorService
+        JwtValidatorService $jwtValidatorService,
     ) {
         parent::__construct($jwtValidatorService);
     }

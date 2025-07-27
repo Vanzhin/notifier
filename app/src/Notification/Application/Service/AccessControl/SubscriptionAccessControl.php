@@ -44,5 +44,4 @@ class SubscriptionAccessControl
 
         return $subscription->getSubscriberId() === $channel->getOwnerId();
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\Bus;
@@ -18,14 +19,16 @@ class MessageBus implements InternalMessageBusInterface
         $this->messageBus = $messageBus;
     }
 
-    #[\Override] public function executeMessages(MessageInterface ...$messages): void
+    #[\Override]
+    public function executeMessages(MessageInterface ...$messages): void
     {
         foreach ($messages as $message) {
             $this->messageBus->dispatch($message);
         }
     }
 
-    #[\Override] public function execute(Envelope $envelope): void
+    #[\Override]
+    public function execute(Envelope $envelope): void
     {
         $this->messageBus->dispatch($envelope);
     }

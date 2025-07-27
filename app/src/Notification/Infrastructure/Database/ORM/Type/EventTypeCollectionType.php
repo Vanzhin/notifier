@@ -13,7 +13,7 @@ class EventTypeCollectionType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string|false
     {
         return json_encode(array_map(
-            fn(EventType $eventType) => $eventType->value,
+            fn (EventType $eventType) => $eventType->value,
             $value
         ));
     }
@@ -21,8 +21,9 @@ class EventTypeCollectionType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform): array
     {
         $data = json_decode($value, true);
+
         return array_map(
-            fn(string $type) => EventType::from($type),
+            fn (string $type) => EventType::from($type),
             $data ?? []
         );
     }

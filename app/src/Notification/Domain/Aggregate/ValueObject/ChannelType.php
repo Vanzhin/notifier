@@ -10,10 +10,9 @@ enum ChannelType: string
 {
     use EnumToArray;
 
-    //ТГ
+    // ТГ
     case TELEGRAM = 'telegram';
 
-    //Email
+    // Email
     case EMAIL = 'email';
-
 }

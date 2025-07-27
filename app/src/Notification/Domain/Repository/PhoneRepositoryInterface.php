@@ -9,5 +9,4 @@ use App\Notification\Domain\Aggregate\PhoneNumber;
 interface PhoneRepositoryInterface
 {
     public function findByPhone(string $phone): ?PhoneNumber;
-
 }

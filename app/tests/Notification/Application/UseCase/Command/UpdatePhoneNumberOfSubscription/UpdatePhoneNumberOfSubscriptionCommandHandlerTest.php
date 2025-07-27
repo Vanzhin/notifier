@@ -129,6 +129,7 @@ class UpdatePhoneNumberOfSubscriptionCommandHandlerTest extends TestCase
         $phoneNumber = $this->createMock(\App\Notification\Domain\Aggregate\PhoneNumber::class);
         $phoneNumber->method('getPhone')
             ->willReturn(new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber($number));
+
         return $phoneNumber;
     }
 }

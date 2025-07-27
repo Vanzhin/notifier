@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('subscription/{subscriptionId}/channel/{channelId}/remove', requirements: [
     'subscriptionId' => Requirement::UUID_V4,
-    'channelId' => Requirement::UUID_V4
+    'channelId' => Requirement::UUID_V4,
 ], methods: ['PATCH'])]
 class RemoveChannelFromSubscriptionAction extends JwtCheckController
 {

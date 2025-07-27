@@ -24,7 +24,7 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
         private SubscriptionRepositoryInterface $subscriptionRepository,
         private UnitOfWorkInterface $unitOfWork,
         private NotificationService $notificationService,
-        private LoggerInterface $notifierLogger
+        private LoggerInterface $notifierLogger,
     ) {
     }
 
@@ -34,7 +34,7 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
         $filter->addEvent($message->getEventType());
         $filter->addPhoneNumber($message->getPhoneNumber());
 
-        do {
+        while (true) {
             $result = $this->subscriptionRepository->findByFilter($filter);
             $subscriptions = $result->items;
 
@@ -58,7 +58,6 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
 
             $filter->pager->page = $filter->pager->page + 1;
             $this->unitOfWork->clear();
-        } while (true);
+        }
     }
-
 }

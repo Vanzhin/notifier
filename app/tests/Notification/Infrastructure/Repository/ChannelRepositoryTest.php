@@ -40,7 +40,7 @@ class ChannelRepositoryTest extends KernelTestCase
         $this->repository->getEntityManager()->clear();
     }
 
-    #[dataProvider('channelDataProvider')]
+    #[DataProvider('channelDataProvider')]
     public function testSaveAndFindChannel(Channel $channel): void
     {
         // 2. Сохраняем канал
@@ -56,7 +56,7 @@ class ChannelRepositoryTest extends KernelTestCase
         $this->assertEquals($channel->getData(), $foundChannel->getData());
     }
 
-    #[dataProvider('channelDataProvider')]
+    #[DataProvider('channelDataProvider')]
     public function testRemoveChannel(Channel $channel): void
     {
         // 1. Создаем и сохраняем канал
@@ -75,7 +75,7 @@ class ChannelRepositoryTest extends KernelTestCase
         $this->assertNull($foundChannel);
     }
 
-    #[dataProvider('channelDataProvider')]
+    #[DataProvider('channelDataProvider')]
     public function testFindBySecret(Channel $channel): void
     {
         // 1. Создаем канал с известным секретом
@@ -93,7 +93,7 @@ class ChannelRepositoryTest extends KernelTestCase
         $this->assertTrue($foundChannel->verify($secret));
     }
 
-    #[dataProvider('channelDataProvider')]
+    #[DataProvider('channelDataProvider')]
     public function testFindByChannelName(Channel $channel): void
     {
         // 1. Сохраняем
@@ -115,8 +115,8 @@ class ChannelRepositoryTest extends KernelTestCase
                 ownerId: Uuid::v4()->toString(),
                 data: [],
                 type: ChannelType::TELEGRAM,
-                channel: 'unique-channel-name-' . uniqid(),
-            )
+                channel: 'unique-channel-name-'.uniqid(),
+            ),
         ];
         yield 'case email' => [
             new Channel(
@@ -124,8 +124,8 @@ class ChannelRepositoryTest extends KernelTestCase
                 ownerId: Uuid::v4()->toString(),
                 data: ['address' => 'test@example.com'],
                 type: ChannelType::EMAIL,
-                channel: 'unique-channel-name-' . uniqid(),
-            )
+                channel: 'unique-channel-name-'.uniqid(),
+            ),
         ];
     }
 }

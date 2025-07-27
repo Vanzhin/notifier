@@ -23,5 +23,4 @@ final readonly class NotificationService
 
         $sender->send($channel, $message);
     }
-
 }

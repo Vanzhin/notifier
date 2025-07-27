@@ -74,5 +74,4 @@ class PhoneNumberOrganizerTest extends TestCase
 
         $this->organizer->createPhoneIfNotExists('invalid-phone');
     }
-
 }

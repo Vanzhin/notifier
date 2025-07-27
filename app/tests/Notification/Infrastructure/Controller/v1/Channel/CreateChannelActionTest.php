@@ -11,8 +11,8 @@ use App\Shared\Domain\Service\JwtValidatorService;
 use App\Shared\Infrastructure\Exception\AppException;
 use App\Shared\Infrastructure\Validation\Validator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class CreateChannelActionTest extends WebTestCase
 {
@@ -58,7 +58,7 @@ class CreateChannelActionTest extends WebTestCase
             json_encode([
                 'type' => 'telegram',
                 'data' => ['channel_id' => 'test'],
-                'channel' => null
+                'channel' => null,
             ])
         );
 
@@ -90,7 +90,7 @@ class CreateChannelActionTest extends WebTestCase
             json_encode([
                 'type' => '', // невалидное значение
                 'data' => [],
-                'channel' => ''
+                'channel' => '',
             ])
         );
 
@@ -119,7 +119,7 @@ class CreateChannelActionTest extends WebTestCase
             json_encode([
                 'type' => 'email',
                 'data' => ['address' => 'test@example.com'],
-                'channel' => 'marketing'
+                'channel' => 'marketing',
             ])
         );
 
@@ -145,7 +145,7 @@ class CreateChannelActionTest extends WebTestCase
             ],
             json_encode([
                 // Пропущены обязательные поля
-                'data' => []
+                'data' => [],
             ])
         );
 

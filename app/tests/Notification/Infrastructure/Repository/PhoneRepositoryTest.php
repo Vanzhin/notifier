@@ -39,7 +39,7 @@ class PhoneRepositoryTest extends KernelTestCase
         $this->repository->getEntityManager()->clear();
     }
 
-    #[dataProvider('phoneDataProvider')]
+    #[DataProvider('phoneDataProvider')]
     public function testFindByPhoneWhenExists(PhoneNumber $phoneNumber): void
     {
         // 1. Подготовка тестовых данных
@@ -73,13 +73,13 @@ class PhoneRepositoryTest extends KernelTestCase
             new PhoneNumber(
                 id: Uuid::v4(),
                 phone: new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79111111111')
-            )
+            ),
         ];
         yield 'case 2' => [
             new PhoneNumber(
                 id: Uuid::v4(),
                 phone: new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79222222222')
-            )
+            ),
         ];
     }
 }

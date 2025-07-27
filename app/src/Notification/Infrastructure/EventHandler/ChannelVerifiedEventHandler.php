@@ -23,7 +23,7 @@ readonly class ChannelVerifiedEventHandler implements EventHandlerInterface
     public function __invoke(ChannelVerifiedEvent $event): void
     {
         $channel = $this->channelRepository->findById($event->channelId);
-        if ($channel === null) {
+        if (null === $channel) {
             throw new AppException('The channel not found.');
         }
 

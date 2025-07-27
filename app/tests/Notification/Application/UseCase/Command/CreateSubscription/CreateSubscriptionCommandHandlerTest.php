@@ -38,7 +38,7 @@ class CreateSubscriptionCommandHandlerTest extends TestCase
         );
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testCreatesSubscriptionWithEventsAndPhoneNumbers(
         string $subscriberId,
         array $phoneNumbers,
@@ -119,32 +119,32 @@ class CreateSubscriptionCommandHandlerTest extends TestCase
         yield 'case 1 phone' => [
             '1234',
             ['79111111111'],
-            [EventType::MISSED_CALL->value]
+            [EventType::MISSED_CALL->value],
         ];
         yield 'case 2 phones' => [
             '1234',
             ['79111111111', '79222222222'],
-            [EventType::MISSED_CALL->value]
+            [EventType::MISSED_CALL->value],
         ];
         yield 'case empty phones' => [
             '1234',
             [],
-            [EventType::MISSED_CALL->value]
+            [EventType::MISSED_CALL->value],
         ];
         yield 'case empty phone empty events' => [
             '1234',
             [],
-            []
+            [],
         ];
         yield 'case 1 phone many events' => [
             '1234',
             ['79111111111'],
-            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value, EventType::AVAILABLE->value]
+            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value, EventType::AVAILABLE->value],
         ];
         yield 'case 2 phone many events' => [
             '1234',
             ['79111111111', '79222222222'],
-            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value, EventType::AVAILABLE->value]
+            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value, EventType::AVAILABLE->value],
         ];
     }
 }

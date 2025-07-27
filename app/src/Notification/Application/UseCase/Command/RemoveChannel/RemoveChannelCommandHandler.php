@@ -14,7 +14,7 @@ readonly class RemoveChannelCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ChannelRepositoryInterface $repository,
-        private ChannelAccessControl $channelAccessControl
+        private ChannelAccessControl $channelAccessControl,
     ) {
     }
 

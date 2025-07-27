@@ -138,7 +138,6 @@ class SubscriptionTest extends TestCase
         $this->assertFalse($this->subscription->isActive());
     }
 
-
     public function testOwnershipCheck(): void
     {
         $this->assertTrue($this->subscription->isOwnedBy($this->subscriberId));
@@ -148,12 +147,13 @@ class SubscriptionTest extends TestCase
     private function createMockChannel(
         string $ownerId,
         ChannelType $channelType,
-        bool $isVerified = true
+        bool $isVerified = true,
     ): \App\Notification\Domain\Aggregate\Channel {
         $channel = $this->createMock(\App\Notification\Domain\Aggregate\Channel::class);
         $channel->method('getOwnerId')->willReturn($ownerId);
         $channel->method('isVerified')->willReturn($isVerified);
         $channel->method('getType')->willReturn($channelType);
+
         return $channel;
     }
 
@@ -167,6 +167,7 @@ class SubscriptionTest extends TestCase
         $phoneNumber = new PhoneNumber(
             $phoneNumber);
         $phone->method('getPhone')->willReturn($phoneNumber);
+
         return $phone;
     }
 }

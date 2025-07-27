@@ -26,7 +26,7 @@ final readonly class TelegramMessageFormatter implements NotificationMessageForm
                 "🔔 Уведомление\n\n📞 Номер: %s\n🎯 Событие: %s\n📌 Дополнительно: %s\n",
                 $message->phone_number,
                 $this->eventTypeResolver->resolve($message->event_type),
-                implode(', ', $message->extra))
+                implode(', ', $message->extra)),
         };
     }
 }

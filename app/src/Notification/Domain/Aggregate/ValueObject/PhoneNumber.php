@@ -39,11 +39,11 @@ class PhoneNumber implements \Stringable
     private function setPhone(string $value): void
     {
         // Для RU номеров заменим первую цифру на 7
-        if (strlen($value) === 11 && str_starts_with($value, '8')) {
-            $value = preg_replace('/^8/', '7', $value);;
+        if (11 === strlen($value) && str_starts_with($value, '8')) {
+            $value = preg_replace('/^8/', '7', $value);
         }
         if (strlen($value) > 11) {
-            $value = self::MN_PREFIX . $value;
+            $value = self::MN_PREFIX.$value;
         }
 
         $this->value = $value;

@@ -9,7 +9,6 @@ use App\Notification\Domain\Message\Notification\NotificationMessage;
 
 class EmailMessageSender implements MessageSenderInterface
 {
-
     public function send(Channel $channel, NotificationMessage $message): void
     {
         // TODO: Implement send() method.

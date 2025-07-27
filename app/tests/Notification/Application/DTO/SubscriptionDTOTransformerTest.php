@@ -7,10 +7,8 @@ namespace Notification\Application\DTO;
 use App\Notification\Application\DTO\ChannelDTOTransformer;
 use App\Notification\Application\DTO\SubscriptionDTO;
 use App\Notification\Application\DTO\SubscriptionDTOTransformer;
-use App\Notification\Domain\Aggregate\Channel;
 use App\Notification\Domain\Aggregate\PhoneNumber;
 use App\Notification\Domain\Aggregate\Subscription;
-use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -22,7 +20,6 @@ class SubscriptionDTOTransformerTest extends TestCase
     private SubscriptionDTOTransformer $transformer;
     private ChannelDTOTransformer $channelTransformerMock;
 
-
     protected function setUp(): void
     {
         $this->channelTransformerMock = $this->getMockBuilder(ChannelDTOTransformer::class)
@@ -31,7 +28,7 @@ class SubscriptionDTOTransformerTest extends TestCase
         $this->transformer = new SubscriptionDTOTransformer($this->channelTransformerMock);
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testFromEntityBasic(Subscription $subscription): void
     {
         $dto = $this->transformer->fromEntity($subscription);
@@ -40,16 +37,16 @@ class SubscriptionDTOTransformerTest extends TestCase
         $this->assertEquals($subscription->getSubscriberId(), $dto->subscriber_id);
     }
 
-    #[dataProvider('subscriptionWithoutChannelsDataProvider')]
+    #[DataProvider('subscriptionWithoutChannelsDataProvider')]
     public function testFromEntityWithoutChannels(
         Uuid $uuid,
         string $subscriberId,
         PhoneNumber $phoneNumber,
         array $events,
         bool $isActive,
-        \DateTimeImmutable $createdAt
+        \DateTimeImmutable $createdAt,
     ): void {
-        //Assert
+        // Assert
         $subscription = $this->createMock(Subscription::class);
         $subscription->method('getId')->willReturn($uuid);
         $subscription->method('getSubscriberId')->willReturn($subscriberId);
@@ -57,16 +54,16 @@ class SubscriptionDTOTransformerTest extends TestCase
         $subscription->method('isActive')->willReturn($isActive);
         $subscription->method('getCreatedAt')->willReturn($createdAt);
         $subscription->channels = new ArrayCollection();
-        //Arrange
+        // Arrange
         $dto = $this->transformer->fromEntity($subscription, false);
 
-        //Assert
+        // Assert
         $this->assertInstanceOf(SubscriptionDTO::class, $dto);
         $this->assertEquals($subscription->getId(), $dto->id);
         $this->assertEquals($subscription->getSubscriberId(), $dto->subscriber_id);
-//        $this->assertEquals(array_map(fn(PhoneNumber $phoneNumber) => $phoneNumber->getPhone()->getValue(),
-//            $subscription->phoneNumbers->toArray()), $dto->phone_numbers);
-        $this->assertEquals(array_map(fn(EventType $eventType) => $eventType->value,
+        //        $this->assertEquals(array_map(fn(PhoneNumber $phoneNumber) => $phoneNumber->getPhone()->getValue(),
+        //            $subscription->phoneNumbers->toArray()), $dto->phone_numbers);
+        $this->assertEquals(array_map(fn (EventType $eventType) => $eventType->value,
             $subscription->getSubscriptionEvents()),
             $dto->events);
         $this->assertEquals($subscription->isActive(), $dto->is_active);
@@ -80,13 +77,13 @@ class SubscriptionDTOTransformerTest extends TestCase
             new Subscription(
                 Uuid::v4(),
                 Uuid::v4()->toString(),
-            )
+            ),
         ];
         yield 'case 2' => [
             new Subscription(
                 Uuid::v4(),
                 Uuid::v4()->toString(),
-            )
+            ),
         ];
     }
 
@@ -100,17 +97,17 @@ class SubscriptionDTOTransformerTest extends TestCase
                 new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79111111111')),
             [EventType::MISSED_CALL, EventType::AVAILABLE],
             true,
-            new \DateTimeImmutable()
+            new \DateTimeImmutable(),
         ];
         yield 'case 2' => [
             Uuid::v4(),
             Uuid::v4()->toString(),
             new PhoneNumber(
                 Uuid::v4(),
-                new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79222222222'),),
+                new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79222222222'), ),
             [EventType::UNAVAILABLE],
             false,
-            new \DateTimeImmutable()
+            new \DateTimeImmutable(),
         ];
     }
 }

@@ -30,16 +30,16 @@ class GetChannelSubscriptionsCommand extends UserCommand
 
         $message = $this->getMessage();
         $chatId = $message->getChat()->getId();
-        $channel = $this->channelRepository->findByChannel((string)$chatId);
+        $channel = $this->channelRepository->findByChannel((string) $chatId);
 
         $responseText = $this->buildGreetingMessage($message);
 
-        if ($channel === null) {
-            return $this->replyToChat($responseText . "❌ *Канал не найден.*");
+        if (null === $channel) {
+            return $this->replyToChat($responseText.'❌ *Канал не найден.*');
         }
 
         if ($channel->getSubscriptions()->isEmpty()) {
-            return $this->replyToChat($responseText . "ℹ️ *Подписок нет.*");
+            return $this->replyToChat($responseText.'ℹ️ *Подписок нет.*');
         }
 
         $responseText .= $this->buildSubscriptionsMessage($channel->getSubscriptions());
@@ -56,6 +56,7 @@ class GetChannelSubscriptionsCommand extends UserCommand
     private function buildGreetingMessage(Message $message): string
     {
         $firstName = $message->getFrom()->getFirstName();
+
         return "👋 *Привет, {$firstName}!*\n\n";
     }
 
@@ -74,10 +75,10 @@ class GetChannelSubscriptionsCommand extends UserCommand
     private function formatSubscription(Subscription $subscription): string
     {
         $numbers = $subscription->phoneNumbers->map(
-            fn(PhoneNumber $phone) => "`{$phone->getPhone()}`"
+            fn (PhoneNumber $phone) => "`{$phone->getPhone()}`"
         )->toArray();
 
-        $events = array_map(fn(EventType $event) => $event->value, $subscription->getSubscriptionEvents());
+        $events = array_map(fn (EventType $event) => $event->value, $subscription->getSubscriptionEvents());
 
         return sprintf(
             "📱 *Номера:*\n%s\n📌 *События:*\n`%s`\n\n",

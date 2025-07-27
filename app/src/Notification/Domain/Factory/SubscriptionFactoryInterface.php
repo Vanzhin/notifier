@@ -9,5 +9,4 @@ use App\Notification\Domain\Aggregate\Subscription;
 interface SubscriptionFactoryInterface
 {
     public function create(string $subscriberId): Subscription;
-
 }

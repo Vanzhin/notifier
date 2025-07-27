@@ -17,5 +17,4 @@ interface ChannelRepositoryInterface
     public function remove(Channel $channel): void;
 
     public function findByChannel(string $channel): ?Channel;
-
 }

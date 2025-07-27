@@ -10,17 +10,15 @@ enum EventType: string
 {
     use EnumToArray;
 
-    //Не доступен
+    // Не доступен
     case UNAVAILABLE = 'unavailable';
 
-    //Пропущенный
+    // Пропущенный
     case MISSED_CALL = 'missed_call';
 
-    //Появился в сети
+    // Появился в сети
     case AVAILABLE = 'available';
 
-    //верификация канала
+    // верификация канала
     case CHANNEL_VERIFICATION = 'channel_verification';
-
-
 }

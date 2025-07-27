@@ -15,7 +15,7 @@ readonly class FindChannelQueryHandler implements QueryHandlerInterface
     public function __construct(
         private ChannelRepositoryInterface $channelRepository,
         private ChannelDTOTransformer $channelDTOTransformer,
-        private ChannelAccessControl $channelAccessControl
+        private ChannelAccessControl $channelAccessControl,
     ) {
     }
 

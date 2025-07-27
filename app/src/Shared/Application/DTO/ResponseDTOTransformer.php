@@ -14,7 +14,7 @@ readonly class ResponseDTOTransformer
             $result = new ResponseDTO(
                 'success',
                 $response->getStatusCode(),
-                json_decode($response->getContent(), true),
+                json_decode($response->getContent(), true) ?: null,
                 null
             );
         } else {

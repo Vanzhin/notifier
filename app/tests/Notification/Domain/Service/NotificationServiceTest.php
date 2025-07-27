@@ -13,7 +13,6 @@ use App\Notification\Domain\Service\MessageSenderInterface;
 use App\Notification\Domain\Service\NotificationService;
 use App\Notification\Domain\Service\TelegramMessageSender;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 class NotificationServiceTest extends TestCase
 {
@@ -72,7 +71,7 @@ class NotificationServiceTest extends TestCase
 
         $channel->method('isVerified')->willReturn(false);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Channel is not verified');
 
         $this->notificationService->sendMessage($channel, $message);

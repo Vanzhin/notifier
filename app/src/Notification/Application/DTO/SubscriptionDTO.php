@@ -15,7 +15,6 @@ class SubscriptionDTO
         public ?array $events = null,
         public ?bool $is_active = null,
         public ?\DateTimeImmutable $created_at = null,
-
     ) {
     }
 }

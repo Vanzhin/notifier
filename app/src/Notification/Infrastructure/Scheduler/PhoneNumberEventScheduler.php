@@ -17,13 +17,14 @@ class PhoneNumberEventScheduler implements ScheduleProviderInterface
     public function getSchedule(): Schedule
     {
         $type = $this->getRandomEventType();
+
         return new Schedule()
             ->add(
-                RecurringMessage::cron('* * * * *',
+                RecurringMessage::cron('*/30 * * * *',
                     new PhoneNumberExternalMessage(
                         '79111111111',
                         $type->value,
-                        $type === EventType::MISSED_CALL ? ['с номера 792222222222'] : []
+                        EventType::MISSED_CALL === $type ? ['с номера 792222222222'] : []
                     ),
                     new \DateTimeZone('Asia/Yekaterinburg')));
     }
@@ -31,7 +32,7 @@ class PhoneNumberEventScheduler implements ScheduleProviderInterface
     private function getRandomEventType(): EventType
     {
         $cases = EventType::cases();
+
         return $cases[array_rand($cases)];
     }
-
 }

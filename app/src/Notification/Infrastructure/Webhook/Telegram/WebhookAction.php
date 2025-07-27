@@ -33,5 +33,4 @@ class WebhookAction extends AbstractController
 
         return new Response('ok');
     }
-
 }

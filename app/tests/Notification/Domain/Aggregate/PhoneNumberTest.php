@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Notification\Domain\Aggregate;
 
 use App\Notification\Domain\Aggregate\PhoneNumber;
-use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber as Phone;
 use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber as Phone;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 
@@ -32,7 +32,7 @@ class PhoneNumberTest extends TestCase
 
     public function testStringRepresentation(): void
     {
-        $this->assertEquals('79111111111', (string)$this->phoneNumber);
+        $this->assertEquals('79111111111', (string) $this->phoneNumber);
     }
 
     public function testAddSubscription(): void

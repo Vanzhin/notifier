@@ -51,7 +51,7 @@ class StartCommand extends UserCommand
         if ($channel->isVerified()) {
             return $this->replyWithSuccess($text, 'Канал уже верифицирован.');
         }
-        $this->addChannelToChannel($channel, (string)$chatId);
+        $this->addChannelToChannel($channel, (string) $chatId);
 
         $this->dispatchChannelVerificationEvent($verificationCode, $channel->getId()->toString());
 
@@ -63,7 +63,7 @@ class StartCommand extends UserCommand
      */
     private function replyWithVerificationError(string $baseText, string $errorMessage): ServerResponse
     {
-        return $this->replyToChat($baseText . PHP_EOL . $errorMessage . ' Удалите этот чат и попробуйте еще раз.');
+        return $this->replyToChat($baseText.PHP_EOL.$errorMessage.' Удалите этот чат и попробуйте еще раз.');
     }
 
     private function findChannelByVerificationCode(string $code): ?Channel
@@ -92,12 +92,12 @@ class StartCommand extends UserCommand
      */
     private function replyWithSuccess(string $baseText, string $successMessage): ServerResponse
     {
-        return $this->replyToChat($baseText . PHP_EOL . $successMessage);
+        return $this->replyToChat($baseText.PHP_EOL.$successMessage);
     }
 
     private function getVerificationCodeFromMessage(Message $message): ?string
     {
-        $code = str_replace($this->usage, "", $message->getText());
+        $code = str_replace($this->usage, '', $message->getText());
 
         if (empty($code)) {
             return null;
@@ -116,11 +116,11 @@ class StartCommand extends UserCommand
 
         return $text;
     }
+
     private function initConfig(): void
     {
         $this->logger = $this->config['logger'];
         $this->messageBus = $this->config['messageBus'];
         $this->channelRepository = $this->config['channelRepository'];
     }
-
 }

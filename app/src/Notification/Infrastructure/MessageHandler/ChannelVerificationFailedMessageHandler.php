@@ -21,7 +21,7 @@ readonly class ChannelVerificationFailedMessageHandler implements MessageHandler
 
     public function __invoke(ChannelVerificationFailedMessage $message): void
     {
-        if ($message->channelId !== null) {
+        if (null !== $message->channelId) {
             $channel = $this->channelRepository->findById($message->channelId);
             if ($channel) {
                 $this->notificationService->sendMessage($channel,
@@ -35,5 +35,4 @@ readonly class ChannelVerificationFailedMessageHandler implements MessageHandler
             }
         }
     }
-
 }

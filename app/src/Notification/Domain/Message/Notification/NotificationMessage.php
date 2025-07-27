@@ -12,8 +12,7 @@ readonly class NotificationMessage
         public string $message,
         public EventType $event_type,
         public ?string $phone_number = null,
-        public array $extra = []
+        public array $extra = [],
     ) {
     }
-
 }

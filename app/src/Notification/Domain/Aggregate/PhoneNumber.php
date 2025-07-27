@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Notification\Domain\Aggregate;
 
+use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber as Phone;
 use App\Shared\Domain\Aggregate\Aggregate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Uid\Uuid;
-use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber as Phone;
 
 class PhoneNumber extends Aggregate implements \Stringable
 {

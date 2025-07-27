@@ -14,7 +14,7 @@ readonly class RemoveSubscriptionCommandHandler implements CommandHandlerInterfa
 {
     public function __construct(
         private SubscriptionRepositoryInterface $subscriptionRepository,
-        private SubscriptionAccessControl $subscriptionAccessControl
+        private SubscriptionAccessControl $subscriptionAccessControl,
     ) {
     }
 

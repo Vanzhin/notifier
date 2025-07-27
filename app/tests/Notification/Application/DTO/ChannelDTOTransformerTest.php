@@ -28,7 +28,7 @@ class ChannelDTOTransformerTest extends TestCase
             ->getMock();
     }
 
-    #[dataProvider('channelDataProvider')]
+    #[DataProvider('channelDataProvider')]
     public function testFromEntityBasic(Channel $channel): void
     {
         $dto = $this->transformer->fromEntity($channel);
@@ -38,7 +38,7 @@ class ChannelDTOTransformerTest extends TestCase
         $this->assertEquals($channel->getType()->value, $dto->type);
     }
 
-    #[dataProvider('channelWithSubscriptionDataProvider')]
+    #[DataProvider('channelWithSubscriptionDataProvider')]
     public function testFromEntityWithSubscriptions(Channel $channel): void
     {
         // Arrange
@@ -63,7 +63,7 @@ class ChannelDTOTransformerTest extends TestCase
                 Uuid::v4()->toString(),
                 ['email' => 'test@example.com'],
                 ChannelType::EMAIL,
-            )
+            ),
         ];
         yield 'case telegram' => [
             new Channel(
@@ -71,7 +71,7 @@ class ChannelDTOTransformerTest extends TestCase
                 Uuid::v4()->toString(),
                 ['email' => 'test@example.com'],
                 ChannelType::EMAIL,
-            )
+            ),
         ];
     }
 
@@ -94,10 +94,10 @@ class ChannelDTOTransformerTest extends TestCase
         );
         $telegramChannel->addSubscription($subscription);
         yield 'case email' => [
-            $emailChannel
+            $emailChannel,
         ];
         yield 'case telegram' => [
-            $telegramChannel
+            $telegramChannel,
         ];
     }
 }

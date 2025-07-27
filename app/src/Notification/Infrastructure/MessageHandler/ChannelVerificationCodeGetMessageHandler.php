@@ -19,7 +19,7 @@ readonly class ChannelVerificationCodeGetMessageHandler implements MessageHandle
         private ChannelRepositoryInterface $channelRepository,
         private ChannelVerifierInterface $channelVerifier,
         private MessageBusInterface $messageBus,
-        private LoggerInterface $notifierLogger
+        private LoggerInterface $notifierLogger,
     ) {
     }
 
@@ -45,5 +45,4 @@ readonly class ChannelVerificationCodeGetMessageHandler implements MessageHandle
                 channelId: $channel?->getId()->toString()));
         }
     }
-
 }

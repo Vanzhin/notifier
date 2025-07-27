@@ -50,7 +50,7 @@ readonly class ChannelDTOTransformer
         $channelDTO->subscriptions = $subscriptions->isEmpty()
             ? []
             : $subscriptions->map(
-                fn($subscription) => $this->subscriptionDTOTransformer->fromEntity($subscription, false)
+                fn ($subscription) => $this->subscriptionDTOTransformer->fromEntity($subscription, false)
             )->toArray();
     }
 }

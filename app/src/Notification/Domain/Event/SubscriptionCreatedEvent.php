@@ -8,7 +8,6 @@ use App\Shared\Domain\Event\EventInterface;
 
 class SubscriptionCreatedEvent implements EventInterface
 {
-
     public function __construct(public string $subscriptionId)
     {
     }

@@ -9,14 +9,14 @@ class HealthCheckActionTest extends WebTestCase
 {
     public function testRequestRespondedSuccessfulResult(): void
     {
-        //arrange
+        // arrange
         $client = static::createClient();
         $client->request(Request::METHOD_GET, '/health-check');
 
-        //act
+        // act
         $jsonResult = json_decode($client->getResponse()->getContent(), true);
 
-        //assert
+        // assert
         $this->assertResponseIsSuccessful();
         $this->assertEquals($jsonResult['data']['status'], 'ok');
     }

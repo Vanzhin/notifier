@@ -30,7 +30,7 @@ class UpdateEventsOfSubscriptionCommandHandlerTest extends TestCase
         );
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testSuccessfullyUpdatesSubscriptionEvents(
         string $subscriptionId,
         string $ownerId,
@@ -101,17 +101,17 @@ class UpdateEventsOfSubscriptionCommandHandlerTest extends TestCase
         yield 'case 1 event' => [
             'sub-123',
             'user-456',
-            [EventType::MISSED_CALL->value]
+            [EventType::MISSED_CALL->value],
         ];
         yield 'case 2 events' => [
             'sub-123',
             'user-456',
-            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value]
+            [EventType::MISSED_CALL->value, EventType::UNAVAILABLE->value],
         ];
         yield 'case empty events' => [
             'sub-123',
             'user-456',
-            []
+            [],
         ];
     }
 }

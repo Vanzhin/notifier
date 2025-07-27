@@ -23,7 +23,6 @@ class GetSubscriptionListAction extends JwtCheckController
         private readonly Validator $validator,
         private readonly SubscriptionMapper $subscriptionMapper,
         JwtValidatorService $jwtValidatorService,
-
     ) {
         parent::__construct($jwtValidatorService);
     }

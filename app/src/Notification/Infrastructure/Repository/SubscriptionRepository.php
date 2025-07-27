@@ -48,9 +48,9 @@ final class SubscriptionRepository extends ServiceEntityRepository implements Su
         if ($filter->getEvents()) {
             $orX = $qb->expr()->orX();
             foreach ($filter->getEvents() as $key => $event) {
-                $paramName = 'event_' . $key;
+                $paramName = 'event_'.$key;
                 $orX->add(
-                    sprintf("JSONB_EXISTS(s.subscriptionEvents, :%s) = true", $paramName)
+                    sprintf('JSONB_EXISTS(s.subscriptionEvents, :%s) = true', $paramName)
                 );
                 $qb->setParameter($paramName, $event);
             }

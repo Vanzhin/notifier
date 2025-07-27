@@ -24,6 +24,7 @@ class JwtCheckController extends AbstractController
         if (empty($token)) {
             throw new AppException('token is empty.');
         }
+
         return $this->jwtValidatorService->validateAndGetPayload($token);
     }
 
@@ -31,6 +32,4 @@ class JwtCheckController extends AbstractController
     {
         return $this->getJwtPayload($request)['user_id'] ?? null;
     }
-
-
 }

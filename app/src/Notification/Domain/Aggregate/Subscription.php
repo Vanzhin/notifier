@@ -70,7 +70,7 @@ class Subscription extends Aggregate
     {
         $this->subscriptionEvents = array_filter(
             $this->subscriptionEvents,
-            fn(EventType $event) => $event !== $eventType
+            fn (EventType $event) => $event !== $eventType
         );
     }
 
@@ -79,7 +79,7 @@ class Subscription extends Aggregate
      */
     public function addChannel(Channel $channel): void
     {
-        //todo пока так
+        // todo пока так
         if (!$this->channels->contains($channel)) {
             if ($this->isOwnedBy($channel->getOwnerId())) {
                 $this->channels->add($channel);
@@ -113,7 +113,7 @@ class Subscription extends Aggregate
 
     public function isActive(): bool
     {
-        if (array_any($this->channels->toArray(), fn($channel) => !$channel->isVerified())) {
+        if (array_any($this->channels->toArray(), fn ($channel) => !$channel->isVerified())) {
             return false;
         }
 
@@ -126,6 +126,7 @@ class Subscription extends Aggregate
             if ($item->getType() === $channelType) {
                 return $item->getVerificationData();
             }
+
             return null;
         });
     }

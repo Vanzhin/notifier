@@ -30,6 +30,6 @@ readonly class TelegramFormatter implements FormatterInterface
             $message .= $this->format($record);
         }
 
-        return "```\n" . $message . "\n```";
+        return "```\n".$message."\n```";
     }
 }

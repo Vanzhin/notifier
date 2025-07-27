@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Notification\Infrastructure\Mapper;
 
-use App\Customers\Domain\Repository\CustomerRewardsFilter;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Shared\Domain\Repository\Pager;
@@ -24,7 +23,7 @@ class SubscriptionMapper
                 'events' => new Assert\All([
                     new Assert\Choice(EventType::values(),
                         message: sprintf('Invalid event type. Allowed: %s.',
-                            implode(', ', EventType::values())))
+                            implode(', ', EventType::values()))),
                 ]),
             ],
             allowExtraFields: false);
@@ -43,7 +42,6 @@ class SubscriptionMapper
                     new Assert\NotBlank(),
                     new Assert\Type('numeric'),
                     new Assert\Positive(),
-
                 ]),
                 'filters' => new Assert\Optional([
                     new Assert\NotBlank(),
@@ -71,7 +69,7 @@ class SubscriptionMapper
                                         new Assert\Choice(
                                             EventType::values(),
                                             message: sprintf('Не верный тип события. Поддерживаются: %s.',
-                                                implode(', ', EventType::values())))
+                                                implode(', ', EventType::values()))),
                                     ]
                                 )
                             ),
@@ -82,7 +80,7 @@ class SubscriptionMapper
                     [
                         new Assert\NotBlank(),
                         new Assert\Type('array'),
-                        new Assert\Choice(choices: ['ASC', 'DESC'], multiple: true)
+                        new Assert\Choice(choices: ['ASC', 'DESC'], multiple: true),
                     ]
                 ),
             ],
@@ -92,8 +90,8 @@ class SubscriptionMapper
     public function buildFilter(array $payload): SubscriptionFilter
     {
         $filter = new SubscriptionFilter(Pager::fromPage(
-            (int)$payload['page'] ?? null,
-            (int)$payload['limit'] ?? null));
+            (int) $payload['page'] ?? null,
+            (int) $payload['limit'] ?? null));
 
         if (isset($payload['sort'])) {
             $filter->setSort($payload['sort']);

@@ -14,7 +14,7 @@ final readonly class EventTypeResolver
             EventType::AVAILABLE => 'Доступен',
             EventType::MISSED_CALL => 'Пропущенный вызов',
             EventType::UNAVAILABLE => 'Не доступен',
-            EventType::CHANNEL_VERIFICATION => 'Верификация канала'
+            EventType::CHANNEL_VERIFICATION => 'Верификация канала',
         };
     }
 }

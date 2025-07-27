@@ -16,7 +16,7 @@ readonly class UpdatePhoneNumberOfSubscriptionCommandHandler implements CommandH
     public function __construct(
         private SubscriptionRepositoryInterface $subscriptionRepository,
         private PhoneNumberOrganizer $numberOrganizer,
-        private SubscriptionAccessControl $subscriptionAccessControl
+        private SubscriptionAccessControl $subscriptionAccessControl,
     ) {
     }
 
@@ -30,7 +30,7 @@ readonly class UpdatePhoneNumberOfSubscriptionCommandHandler implements CommandH
 
         if (!$this->subscriptionAccessControl->canUpdateSubscription($subscription, $command->ownerId)) {
             throw new AppException('You are not allowed to do this action.', 403);
-        };
+        }
 
         $subscription->phoneNumbers->clear();
         foreach ($command->phoneNumbers as $phoneNumber) {

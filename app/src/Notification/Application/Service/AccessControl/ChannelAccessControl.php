@@ -8,7 +8,7 @@ use App\Notification\Domain\Aggregate\Channel;
 
 class ChannelAccessControl
 {
-// пока так, потом можно ввести систему ролей
+    // пока так, потом можно ввести систему ролей
     /**
      * Может ли пользователь удалить канал?
      */
@@ -32,5 +32,4 @@ class ChannelAccessControl
     {
         return $channel->isOwnedBy($userId);
     }
-
 }

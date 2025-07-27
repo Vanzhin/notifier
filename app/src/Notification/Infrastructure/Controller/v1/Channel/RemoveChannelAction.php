@@ -18,7 +18,7 @@ class RemoveChannelAction extends JwtCheckController
 {
     public function __construct(
         private readonly CommandBusInterface $commandBus,
-        JwtValidatorService $jwtValidatorService
+        JwtValidatorService $jwtValidatorService,
     ) {
         parent::__construct($jwtValidatorService);
     }
@@ -26,7 +26,7 @@ class RemoveChannelAction extends JwtCheckController
     public function __invoke(string $id, Request $request): JsonResponse
     {
         $userId = $this->getUserId($request);
-        $query = new RemoveChannelCommand(channelId: $id, ownerId: $userId,);
+        $query = new RemoveChannelCommand(channelId: $id, ownerId: $userId);
         $this->commandBus->execute($query);
 
         return new JsonResponse(null);

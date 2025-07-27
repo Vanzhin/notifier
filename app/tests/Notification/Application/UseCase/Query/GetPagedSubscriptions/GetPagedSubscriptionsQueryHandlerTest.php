@@ -11,9 +11,9 @@ use App\Notification\Application\UseCase\Query\GetPagedSubscriptionList\GetPaged
 use App\Notification\Application\UseCase\Query\GetPagedSubscriptionList\GetPagedSubscriptionsQueryHandler;
 use App\Notification\Application\UseCase\Query\GetPagedSubscriptionList\GetPagedSubscriptionsQueryResult;
 use App\Notification\Domain\Aggregate\Subscription;
+use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
 use App\Shared\Domain\Repository\Pager;
-use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Shared\Domain\Repository\PaginationResult;
 use PHPUnit\Framework\TestCase;
 
@@ -88,7 +88,6 @@ class GetPagedSubscriptionsQueryHandlerTest extends TestCase
         $subscription2 = $this->createMock(Subscription::class);
         $dto1 = new SubscriptionDTO(id: 'sub-1', subscriber_id: 'user-1234');
 
-
         $paginatedResult = new PaginationResult([$subscription1, $subscription2],
             count([$subscription1, $subscription2]));
 
@@ -114,7 +113,7 @@ class GetPagedSubscriptionsQueryHandlerTest extends TestCase
         $filter = new SubscriptionFilter(new Pager(1, 10));
         $query = new GetPagedSubscriptionsQuery(filter: $filter, userId: $userId);
 
-        $paginatedResult = new PaginationResult([],0);
+        $paginatedResult = new PaginationResult([], 0);
 
         $this->subscriptionRepository->expects($this->once())
             ->method('findByFilter')
@@ -134,7 +133,7 @@ class GetPagedSubscriptionsQueryHandlerTest extends TestCase
         $filter = new SubscriptionFilter(new Pager(1, 10));
         $query = new GetPagedSubscriptionsQuery(filter: $filter, userId: $userId);
 
-        $paginatedResult = new PaginationResult([],0);
+        $paginatedResult = new PaginationResult([], 0);
 
         $this->subscriptionRepository->method('findByFilter')->willReturn($paginatedResult);
         $this->accessControl->expects($this->never())->method('canViewSubscription');

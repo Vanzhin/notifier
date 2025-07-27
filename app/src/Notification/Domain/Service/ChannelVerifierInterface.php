@@ -13,5 +13,4 @@ interface ChannelVerifierInterface
     public function initiateChannelVerification(Channel $channel): string;
 
     public function verify(Channel $channel, string $secret): void;
-
 }

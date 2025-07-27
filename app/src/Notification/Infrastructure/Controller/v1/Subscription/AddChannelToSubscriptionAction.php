@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('subscription/{subscriptionId}/channel/{channelId}/add', requirements: [
     'subscriptionId' => Requirement::UUID_V4,
-    'channelId' => Requirement::UUID_V4
+    'channelId' => Requirement::UUID_V4,
 ], methods: ['PATCH'])]
 class AddChannelToSubscriptionAction extends JwtCheckController
 {

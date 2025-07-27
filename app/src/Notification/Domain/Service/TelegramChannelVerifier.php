@@ -47,6 +47,6 @@ final readonly class TelegramChannelVerifier implements ChannelVerifierInterface
 
     public function supports(Channel $channel): bool
     {
-        return $channel->getType() === ChannelType::TELEGRAM;
+        return ChannelType::TELEGRAM === $channel->getType();
     }
 }

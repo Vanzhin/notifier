@@ -23,5 +23,4 @@ final readonly class MessageSenderFactory
             default => throw new \InvalidArgumentException('Unsupported channel type'),
         };
     }
-
 }

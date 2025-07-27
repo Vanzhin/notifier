@@ -8,7 +8,7 @@ use App\Shared\Domain\Repository\Pager;
 
 final class SubscriptionFilter
 {
-    //todo sort
+    // todo sort
     private array $sort = [];
     private array $phone_numbers = [];
     private array $events = [];
@@ -61,5 +61,4 @@ final class SubscriptionFilter
     {
         $this->owner_id = $owner_id;
     }
-
 }

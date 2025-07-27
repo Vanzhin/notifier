@@ -6,7 +6,6 @@ namespace App\Notification\Application\Channel\Telegram\Command;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Psr\Log\LoggerInterface;
 
 class HelloCommand extends UserCommand
 {
@@ -28,7 +27,7 @@ class HelloCommand extends UserCommand
         $text .= "Вот что я могу:\n\n";
         $text .= "🔹 /hello - Приветствие\n";
         $text .= "🔹 /get_channel_subscriptions - Посмотреть подписки канала\n";
-//        $text .= "🔹 /unsubscribe - Отписаться от уведомлений\n";
+        //        $text .= "🔹 /unsubscribe - Отписаться от уведомлений\n";
 
         return $this->replyToChat($text);
     }

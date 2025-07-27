@@ -8,10 +8,10 @@ use App\Notification\Domain\Aggregate\ChannelInterface;
 use App\Notification\Domain\Aggregate\ValueObject\ChannelType;
 use App\Notification\Domain\Repository\ChannelRepositoryInterface;
 use App\Shared\Application\Message\MessageBusInterface;
+use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
-use Longman\TelegramBot\Entities\ServerResponse;
 use Psr\Log\LoggerInterface;
 
 final readonly class TelegramBotService
@@ -30,7 +30,8 @@ final readonly class TelegramBotService
     }
 
     /**
-     * Установка вебхука
+     * Установка вебхука.
+     *
      * @throws TelegramException
      */
     public function setWebhook(): ServerResponse
@@ -40,7 +41,7 @@ final readonly class TelegramBotService
     }
 
     /**
-     * Отправка простого сообщения
+     * Отправка простого сообщения.
      */
     public function sendMessage(int $chatId, string $text, array $options = []): ServerResponse
     {
@@ -55,14 +56,14 @@ final readonly class TelegramBotService
         } catch (\Exception $e) {
             $this->notifierLogger->error('Failed to send Telegram message', [
                 'chat_id' => $chatId,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
     }
 
     /**
-     * Обработка входящих запросов
+     * Обработка входящих запросов.
      */
     public function handle(string $secret): void
     {
@@ -77,15 +78,15 @@ final readonly class TelegramBotService
     }
 
     /**
-     * Проверка поддержки канала
+     * Проверка поддержки канала.
      */
     public function supports(ChannelInterface $channel): bool
     {
-        return $channel->getType() === ChannelType::TELEGRAM;
+        return ChannelType::TELEGRAM === $channel->getType();
     }
 
     /**
-     * Получение экземпляра Telegram API клиента
+     * Получение экземпляра Telegram API клиента.
      */
     public function getClient(): Telegram
     {
@@ -114,7 +115,6 @@ final readonly class TelegramBotService
                 'messageBus' => $this->messageBus,
                 'channelRepository' => $this->channelRepository,
             ],
-
         ];
 
         foreach ($this->telegram->getCommandsList() as $command) {

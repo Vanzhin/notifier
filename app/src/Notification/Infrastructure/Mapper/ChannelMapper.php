@@ -29,15 +29,15 @@ class ChannelMapper
                 'channel_id' => [
                     new Assert\NotBlank(allowNull: true),
                     new Assert\Type('string'),
-                ]
+                ],
             ],
             'email' => [
                 'email' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
-                ]
+                ],
             ],
-            default => []
+            default => [],
         };
 
         return new Assert\Collection($constrains);
@@ -49,14 +49,12 @@ class ChannelMapper
             'telegram' => [
                 new Assert\NotBlank(allowNull: true),
                 new Assert\Type('string'),
-
             ],
             'email' => [
                 new Assert\NotBlank(),
                 new Assert\Email(),
-
             ],
-            default => []
+            default => [],
         };
     }
 }

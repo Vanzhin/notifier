@@ -18,7 +18,7 @@ class RemoveSubscriptionAction extends JwtCheckController
 {
     public function __construct(
         private readonly CommandBusInterface $commandBus,
-        JwtValidatorService $jwtValidatorService
+        JwtValidatorService $jwtValidatorService,
     ) {
         parent::__construct($jwtValidatorService);
     }

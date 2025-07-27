@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Notification\Application\UseCase\Query\FindSubscription;
 
 use App\Notification\Application\DTO\SubscriptionDTOTransformer;
+use App\Notification\Application\Service\AccessControl\SubscriptionAccessControl;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
-use App\Notification\Application\Service\AccessControl\SubscriptionAccessControl;
 use App\Shared\Infrastructure\Exception\AppException;
 
 readonly class FindSubscriptionQueryHandler implements QueryHandlerInterface

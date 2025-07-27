@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Notification\Infrastructure\Repository;
 
-use App\Notification\Domain\Aggregate\Subscription;
 use App\Notification\Domain\Aggregate\PhoneNumber;
+use App\Notification\Domain\Aggregate\Subscription;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
 use App\Notification\Domain\Repository\SubscriptionFilter;
 use App\Notification\Domain\Repository\SubscriptionRepositoryInterface;
@@ -44,7 +44,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->repository->getEntityManager()->clear();
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testSaveAndFindById(Subscription $subscription): void
     {
         $this->repository->save($subscription);
@@ -55,7 +55,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->assertEquals($subscription->getId(), $found->getId());
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testRemove(Subscription $subscription): void
     {
         $this->repository->save($subscription);
@@ -66,7 +66,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->assertNull($this->repository->findById($id->toString()));
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testFindByFilterWithPhoneNumbers(Subscription $subscription): void
     {
         // Создаем тестовые данные
@@ -84,7 +84,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->assertGreaterThanOrEqual(1, $result->items);
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testFindByFilterWithEvents(Subscription $subscription): void
     {
         // Создаем тестовые данные
@@ -102,7 +102,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->assertGreaterThanOrEqual(1, $result->items);
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testFindByFilterWithOwnerId(Subscription $subscription): void
     {
         // Создаем тестовые данные
@@ -121,12 +121,12 @@ class SubscriptionRepositoryTest extends KernelTestCase
     public function testFindByFilterWithPagination(): void
     {
         // Создаем 15 тестовых подписок
-        for ($i = 10; $i < 25; $i++) {
+        for ($i = 10; $i < 25; ++$i) {
             $sub = new Subscription(
                 id: Uuid::v4(), subscriberId: Uuid::v4()->toString(),
             );
             $sub->addPhoneNumber(new PhoneNumber(Uuid::v4(),
-                new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('791111111' . $i)));
+                new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('791111111'.$i)));
             $sub->addEvent(EventType::AVAILABLE);
             $this->repository->save($sub);
         }
@@ -139,7 +139,7 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $this->assertEquals(15, $result->total);
     }
 
-    #[dataProvider('subscriptionDataProvider')]
+    #[DataProvider('subscriptionDataProvider')]
     public function testFindByFilterWithMultipleConditions(Subscription $subscription): void
     {
         // Создаем тестовые данные
@@ -172,8 +172,6 @@ class SubscriptionRepositoryTest extends KernelTestCase
             new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber('79111111111')));
         $sub1->addEvent(EventType::AVAILABLE);
 
-
-
         $sub2 = new Subscription(
             id: Uuid::v4(),
             subscriberId: Uuid::v4()->toString()
@@ -183,12 +181,11 @@ class SubscriptionRepositoryTest extends KernelTestCase
         $sub2->addEvent(EventType::AVAILABLE);
         $sub2->addEvent(EventType::UNAVAILABLE);
 
-
         yield 'case 1' => [
-            $sub1
+            $sub1,
         ];
         yield 'case 2' => [
-            $sub2
+            $sub2,
         ];
     }
 }

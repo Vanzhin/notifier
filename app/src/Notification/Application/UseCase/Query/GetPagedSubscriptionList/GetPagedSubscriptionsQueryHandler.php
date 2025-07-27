@@ -16,7 +16,6 @@ readonly class GetPagedSubscriptionsQueryHandler implements QueryHandlerInterfac
         private SubscriptionAccessControl $subscriptionAccessControl,
         private SubscriptionRepositoryInterface $subscriptionRepository,
         private SubscriptionDTOTransformer $subscriptionDTOTransformer,
-
     ) {
     }
 
