@@ -59,6 +59,15 @@
             ".php-cs-fixer.dist.php"
         ]
     },
+    "odolbeau/phone-number-bundle": {
+        "version": "4.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "0d4442802a90dd2d1d6c18618998b43f69af0d95"
+        }
+    },
     "phpunit/phpunit": {
         "version": "12.2",
         "recipe": {

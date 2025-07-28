@@ -2,76 +2,97 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Notification\Domain\Aggregate\ValueObject;
+namespace Tests\App\Notification\Domain\Aggregate\ValueObject;
 
 use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber;
 use App\Shared\Infrastructure\Exception\AppException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PhoneNumberTest extends TestCase
 {
-    public function testValidRussianPhoneNumber(): void
+    #[DataProvider('validPhoneNumbersProvider')]
+    public function testValidPhoneNumbers(string $input, string $expectedValue, string $expectedE164): void
     {
-        $phone = new PhoneNumber('89123456789');
-        $this->assertEquals('79123456789', (string) $phone);
-        $this->assertEquals('79123456789', $phone->getValue());
+        $phone = new PhoneNumber($input);
+
+        $this->assertEquals($expectedValue, $phone->getValue());
+        $this->assertEquals($expectedE164, $phone->getE164());
+        $this->assertEquals($expectedValue, (string)$phone);
     }
 
-    public function testValidInternationalPhoneNumber(): void
+    public static function validPhoneNumbersProvider(): array
     {
-        $phone = new PhoneNumber('1234567890123');
-        $this->assertEquals('8101234567890123', (string) $phone);
+        return [
+            ['8 (916) 123-45-67', '79161234567', '+79161234567'],
+            ['+7 916 123 45 67', '79161234567', '+79161234567'],
+            ['9161234567', '79161234567', '+79161234567'],
+            ['+1 650-253-0000', '16502530000', '+16502530000'],
+            ['88005553535', '78005553535', '+78005553535'],
+        ];
     }
 
-    public function testMinimumLengthPhoneNumber(): void
-    {
-        $phone = new PhoneNumber('12345678901');
-        $this->assertEquals('12345678901', (string) $phone);
+    #[DataProvider('phoneComponentsProvider')]
+    public function testPhoneComponents(
+        string $input,
+        string $expectedCountryCode,
+        string $expectedNationalNumber
+    ): void {
+        $phone = new PhoneNumber($input);
+
+        $this->assertEquals($expectedCountryCode, $phone->getCountryCode());
+        $this->assertEquals($expectedNationalNumber, $phone->getNationalNumber());
     }
 
-    public function testMaximumLengthPhoneNumber(): void
+    public static function phoneComponentsProvider(): array
     {
-        $phone = new PhoneNumber('12345678901234567');
-        $this->assertEquals('81012345678901234567', (string) $phone);
+        return [
+            ['8 (916) 123-45-67', '7', '9161234567'],
+            ['+1 650-253-0000', '1', '6502530000'],
+            ['+44 20 7123 4567', '44', '2071234567'],
+        ];
     }
 
-    public function testInvalidShortPhoneNumber(): void
+    public function testNationalFormat(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Incorrect phone number');
-        new PhoneNumber('1234567890'); // 10 digits
+        $phone = new PhoneNumber('8 (916) 123-45-67');
+        $this->assertMatchesRegularExpression('/^8\s?\(?\d{3}\)?\s?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/',
+            $phone->getNationalFormat());
     }
 
-    public function testInvalidLongPhoneNumber(): void
+    #[DataProvider('invalidPhoneNumbersProvider')]
+    public function testInvalidPhoneNumbers(string $invalidPhone): void
     {
         $this->expectException(AppException::class);
-        $this->expectExceptionMessage('Incorrect phone number');
-        new PhoneNumber('123456789012345678'); // 18 digits
+        new PhoneNumber($invalidPhone);
     }
 
-    public function testInvalidFormatPhoneNumber(): void
+    public static function invalidPhoneNumbersProvider(): array
     {
-        $this->expectException(AppException::class);
-        $this->expectExceptionMessage('Incorrect phone number');
-        new PhoneNumber('+79123456789'); // contains non-digit character
+        return [
+            ['123'],
+            ['+123'],
+            ['8 (123) 456-78'],
+            ['not a phone number'],
+            ['+999 123 456 789'], // Несуществующий код страны
+        ];
     }
 
-    public function testRussianPhoneNumberWith7Prefix(): void
+    public function testEquals(): void
     {
-        $phone = new PhoneNumber('79123456789');
-        $this->assertEquals('79123456789', (string) $phone);
+        $phone1 = new PhoneNumber('8 (916) 123-45-67');
+        $phone2 = new PhoneNumber('+7 916 123 45 67');
+        $phone3 = new PhoneNumber('+1 650-253-0000');
+
+        $this->assertTrue($phone1->equals($phone2));
+        $this->assertFalse($phone1->equals($phone3));
     }
 
-    public function testMNPhoneNumberTransformation(): void
+    public function testIsValidStaticMethod(): void
     {
-        $phone = new PhoneNumber('123456789012');
-        $this->assertEquals('810123456789012', (string) $phone);
-    }
-
-    public function testStringableInterface(): void
-    {
-        $phone = new PhoneNumber('89123456789');
-        $this->assertInstanceOf(\Stringable::class, $phone);
-        $this->assertEquals('79123456789', (string) $phone);
+        $this->assertTrue(PhoneNumber::isValid('8 (916) 123-45-67'));
+        $this->assertTrue(PhoneNumber::isValid('+1 650-253-0000'));
+        $this->assertFalse(PhoneNumber::isValid('123'));
+        $this->assertFalse(PhoneNumber::isValid('not a phone'));
     }
 }
