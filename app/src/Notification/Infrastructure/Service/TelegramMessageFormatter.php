@@ -24,7 +24,7 @@ final readonly class TelegramMessageFormatter implements NotificationMessageForm
                 implode(', ', $message->extra)),
             default => sprintf(
                 "🔔 Уведомление\n\n📞 Номер: %s\n🎯 Событие: %s\n📌 Дополнительно: %s\n",
-                $message->phone_number,
+                $message->phone_number->getNationalFormat(),
                 $this->eventTypeResolver->resolve($message->event_type),
                 implode(', ', $message->extra)),
         };

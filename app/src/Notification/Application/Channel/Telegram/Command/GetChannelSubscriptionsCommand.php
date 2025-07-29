@@ -78,7 +78,10 @@ class GetChannelSubscriptionsCommand extends UserCommand
     private function formatSubscription(Subscription $subscription): string
     {
         $numbers = $subscription->phoneNumbers->map(
-            fn(PhoneNumber $phone) => "`{$phone->getPhone()}`"
+            function (PhoneNumber $phone) {
+                $number = new \App\Notification\Domain\Aggregate\ValueObject\PhoneNumber($phone->getPhone()->getValue());
+                return "`{$number}`";
+            }
         )->toArray();
 
         $events = array_map(function (EventType $event) {
@@ -88,7 +91,7 @@ class GetChannelSubscriptionsCommand extends UserCommand
         return sprintf(
             "📱 *Номера:*\n%s\n📌 *События:*\n`%s`\n\n",
             implode("\n", $numbers),
-            implode('`, `', $events)
+            implode('`,  `', $events)
         );
     }
 }

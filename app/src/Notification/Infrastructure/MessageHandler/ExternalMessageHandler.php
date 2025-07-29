@@ -6,6 +6,7 @@ namespace App\Notification\Infrastructure\MessageHandler;
 
 use App\Notification\Domain\Aggregate\Subscription;
 use App\Notification\Domain\Aggregate\ValueObject\EventType;
+use App\Notification\Domain\Aggregate\ValueObject\PhoneNumber;
 use App\Notification\Domain\Message\Notification\NotificationMessage;
 use App\Notification\Domain\Message\PhoneNumberExternalMessage;
 use App\Notification\Domain\Repository\SubscriptionFilter;
@@ -14,6 +15,7 @@ use App\Notification\Domain\Service\NotificationService;
 use App\Shared\Application\Message\MessageHandlerInterface;
 use App\Shared\Domain\Repository\Pager;
 use App\Shared\Domain\Repository\UnitOfWorkInterface;
+use App\Shared\Infrastructure\Exception\AppException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -28,6 +30,9 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
     ) {
     }
 
+    /**
+     * @throws AppException
+     */
     public function __invoke(PhoneNumberExternalMessage $message): void
     {
         $filter = new SubscriptionFilter(new Pager(1, 100));
@@ -49,7 +54,7 @@ readonly class ExternalMessageHandler implements MessageHandlerInterface
                         new NotificationMessage(
                             'New phone number event',
                             EventType::from($message->getEventType()),
-                            $message->getPhoneNumber(),
+                            new PhoneNumber($message->getPhoneNumber()),
                             $message->getExtra()
                         )
                     );
