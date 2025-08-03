@@ -4,7 +4,6 @@ controllers:
         namespace: App\Shared\Infrastructure\Controller
     type: attribute
 
-
 api_v1:
     resource: ../src/Notification/Infrastructure/Controller/v1
     type: attribute
@@ -20,3 +19,23 @@ webhooks:
 kernel:
     resource: ../src/Shared/Infrastructure/Kernel.php
     type: attribute
+
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+
+app.redocly:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.redocly }
+
+app.stoplight:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.stoplight }
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
