@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Notification\Infrastructure\Controller\v1\Channel;
 
+use App\Notification\Application\DTO\ChannelDTO;
 use App\Notification\Application\UseCase\Query\FindChannel\FindChannelQuery;
+use App\Shared\Application\DTO\ResponseDTO;
 use App\Shared\Application\Query\QueryBusInterface;
 use App\Shared\Domain\Service\JwtValidatorService;
 use App\Shared\Infrastructure\Controller\JwtCheckController;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,28 +39,77 @@ use Symfony\Component\Routing\Requirement\Requirement;
             response: 200,
             description: 'Channel details',
             content: new OA\JsonContent(
+                required: ["result", "status", "data", "message"],
                 properties: [
-                    new OA\Property(property: 'id', type: 'string', format: 'uuid'),
-                    new OA\Property(property: 'name', type: 'string'),
-                    new OA\Property(property: 'type', type: 'string'),
-                    new OA\Property(property: 'createdAt', type: 'string', format: 'date-time'),
-                    new OA\Property(property: 'updatedAt', type: 'string', format: 'date-time')
+                    new OA\Property(property: "result", type: "string", example: "success"),
+                    new OA\Property(property: "status", type: "integer", example: 200),
+                    new OA\Property(property: "data", ref: new Model(type: ChannelDTO::class), nullable: true),
+                    new OA\Property(property: "message", ref: null),
                 ],
-                type: 'object'
+                type: "object",
+                additionalProperties: false
             )
         ),
         new OA\Response(
             response: 401,
-            description: 'Unauthorized - Invalid or missing JWT token'
+            description: 'Unauthorized - Invalid or missing JWT token',
+            content: new OA\JsonContent(
+                examples: [
+                    new OA\Examples(
+                        example: 'unauthorized',
+                        summary: 'Unauthorized',
+                        value: [
+                            'result' => 'error',
+                            'status' => 401,
+                            'data' => null,
+                            'message' => 'Unauthorized'
+                        ]
+                    )
+                ],
+                ref: new Model(type: ResponseDTO::class),
+                type: 'object'
+            )
         ),
         new OA\Response(
             response: 403,
-            description: 'Forbidden - Channel does not belong to user'
+            description: 'Forbidden',
+            content: new OA\JsonContent(
+                examples: [
+                    new OA\Examples(
+                        example: 'forbidden',
+                        summary: 'Forbidden',
+                        value: [
+                            'result' => 'error',
+                            'status' => 403,
+                            'data' => null,
+                            'message' => 'Forbidden'
+                        ]
+                    )
+                ],
+                ref: new Model(type: ResponseDTO::class),
+                type: 'object'
+            )
         ),
         new OA\Response(
-            response: 404,
-            description: 'Channel not found'
-        )
+            response: 500,
+            description: 'Internal server error',
+            content: new OA\JsonContent(
+                examples: [
+                    new OA\Examples(
+                        example: 'internal_server_error',
+                        summary: 'Internal server error',
+                        value: [
+                            'result' => 'error',
+                            'status' => 500,
+                            'data' => null,
+                            'message' => 'Internal server error'
+                        ]
+                    )
+                ],
+                ref: new Model(type: ResponseDTO::class),
+                type: 'object'
+            )
+        ),
     ]
 )]
 class GetChannelAction extends JwtCheckController
